@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Store.Library
 {
-    class Customer
+    public class Customer
     {
         // backing field for "FirstName" property
         private string _firstName;
