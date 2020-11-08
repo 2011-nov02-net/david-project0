@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Store.Library
 {
-    class LocationRepository
+    public class LocationRepository
     {
         private readonly ICollection<Location> _location;
         private static int _idCounter;
