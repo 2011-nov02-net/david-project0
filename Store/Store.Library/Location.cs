@@ -32,17 +32,21 @@ namespace Store.Library
         /// <remarks>
         /// Just the get method for the _id value since the Location Repository will handle the creation of the id value
         /// </remarks>
-        public int Id { get; }
+        public int Id {
+            get { return Id; }
+            private set
+            {
+                if (value > 0)
+                    this.Id = value;
+                else
+                    throw new ArgumentOutOfRangeException("id", "Id must be positive");
+            }
+        }
 
         public Location(string name, int id)
         {
             this.Name = name;
-            // just simple error checking here
-            // make sure id is positive, but we rely on the repo to ensure that ids are handed out in order
-            if (id > 0)
-                this.Id = id;
-            else
-                throw new ArgumentOutOfRangeException("id", "Id must be positive");
+            this.Id = id;
 
 
         }

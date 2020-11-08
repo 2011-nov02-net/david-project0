@@ -10,8 +10,6 @@ namespace Store.Library
         private string _firstName;
         // backing field for "LastName" property
         private string _lastName;
-        // backing field for "Id" Field
-        private string _id;
 
         /// <summary>
         /// The customer's first name, Must have a value
@@ -30,7 +28,7 @@ namespace Store.Library
             }
         }
 
-        ///<summary>
+        /// <summary>
         /// The customer's last name, must have a value
         /// </summary>
         public string LastName
@@ -43,6 +41,17 @@ namespace Store.Library
                     throw new ArgumentException("Cannot have blank Last Name");
                 }
                 _lastName = value;
+            }
+        }
+
+        public int Id {
+            get { return Id; }
+            private set
+            {
+                if (value > 0)
+                    this.Id = value;
+                else
+                    throw new ArgumentOutOfRangeException("id", "Id must be positive");
             }
         }
 
