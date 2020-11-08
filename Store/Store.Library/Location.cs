@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Store.Library
 {
-    class Location
+    public class Location
     {
         // backing field for "Name" field
         private string _name;
@@ -31,12 +32,21 @@ namespace Store.Library
         /// <remarks>
         /// Just the get method for the _id value since the Location Repository will handle the creation of the id value
         /// </remarks>
-        public string Id { get; }
+        public int Id { get; }
 
-        public Location(string name, string id)
+        public Location(string name, int id)
         {
             this.Name = name;
-            this.Id = id;
+            // just simple error checking here
+            // make sure id is positive, but we rely on the repo to ensure that ids are handed out in order
+            if (id > 0)
+                this.Id = id;
+            else
+                throw new ArgumentOutOfRangeException("id", "Id must be positive");
+
+
         }
+
+        public Location() { }
     }
 }
