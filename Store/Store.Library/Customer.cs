@@ -42,6 +42,7 @@ namespace Store.Library
                 {
                     throw new ArgumentException("Cannot have blank Last Name");
                 }
+                _lastName = value;
             }
         }
 
