@@ -58,5 +58,15 @@ namespace Store.Library
             _idCounter++;
             return location;
         }
+
+        /// <summary>
+        /// Get and return location with a given id
+        /// </summary>
+        /// <param name="id">Id of the location we want</param>
+        /// <returns>The Location</returns>
+        public Location GetLocation(int id)
+        {
+            return _location.First(l => l.Id == id);
+        }
     }
 }
