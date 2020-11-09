@@ -54,7 +54,10 @@ namespace Store.Library
 
         public void AddInventory(int quantity)
         {
-            throw new NotImplementedException("Not implemented");
+            //check to make sure that new quantity is greater than zero
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException("quantity", "The quantity to add to Inventory must be a positive value");
+            this.Quantity += quantity;
         }
     }
 }
