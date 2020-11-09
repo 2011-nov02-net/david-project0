@@ -10,7 +10,7 @@ namespace Store.Testing
         [InlineData(1)]
         [InlineData(10)]
         [InlineData(100)]
-        public void RestockInventory_ValueAboveZero(int value)
+        public void AddInventory_ValueAboveZero(int value)
         {
             int productId = 1;
             // using this constructor we can be assured that the 
@@ -21,6 +21,17 @@ namespace Store.Testing
             inventory.AddInventory(value);
 
             Assert.Equal(value, inventory.Quantity);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(-10)]
+        public void AddInventory_ValueAtAndBelowZero(int value)
+        {
+            int productId = 1;
+            Inventory inventory = new Inventory(productId);
+            Assert.ThrowsAny<ArgumentException>(() => inventory.AddInventory(value));
         }
     }
 }
