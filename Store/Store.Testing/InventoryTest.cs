@@ -6,13 +6,14 @@ namespace Store.Testing
 {
     public class InventoryTest
     {
+        int productId = 1;
+
         [Theory]
         [InlineData(1)]
         [InlineData(10)]
         [InlineData(100)]
         public void AddInventory_ValueAboveZero(int value)
         {
-            int productId = 1;
             // using this constructor we can be assured that the 
             // starting inventory is zero.  means
             // that we can check the current quantity with
@@ -29,9 +30,31 @@ namespace Store.Testing
         [InlineData(-10)]
         public void AddInventory_ValueAtAndBelowZero(int value)
         {
-            int productId = 1;
             Inventory inventory = new Inventory(productId);
             Assert.ThrowsAny<ArgumentException>(() => inventory.AddInventory(value));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public void SellInventory_ValueInStock_NoError(int value)
+        {
+            Inventory inventory = new Inventory(productId, value);
+            inventory.SellInventory(value);
+
+            Assert.Equal(0, inventory.Quantity);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public void SellInventory_MoreThanInStock_Error(int value)
+        {
+            Inventory inventory = new Inventory(productId, value);
+
+            Assert.ThrowsAny<ArgumentException>(() => inventory.SellInventory(value + 1));
         }
     }
 }
