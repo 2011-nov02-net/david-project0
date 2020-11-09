@@ -9,6 +9,8 @@ namespace Store.Library
     {
         // backing field for "Name" field
         private string _name;
+        // backing field for "Id" field
+        private int _id;
 
         /// <summary>
         /// The Name of the store, must have a value
@@ -33,11 +35,11 @@ namespace Store.Library
         /// Just the get method for the _id value since the Location Repository will handle the creation of the id value
         /// </remarks>
         public int Id {
-            get { return Id; }
+            get { return _id; }
             private set
             {
                 if (value > 0)
-                    this.Id = value;
+                    _id = value;
                 else
                     throw new ArgumentOutOfRangeException("id", "Id must be positive");
             }
@@ -47,8 +49,6 @@ namespace Store.Library
         {
             this.Name = name;
             this.Id = id;
-
-
         }
 
         public Location() { }
