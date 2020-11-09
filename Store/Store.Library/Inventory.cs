@@ -52,6 +52,17 @@ namespace Store.Library
             this.Quantity = 0;
         }
 
+        /// <summary>
+        /// Constructor for the inventory
+        /// </summary>
+        /// <param name="id">Product Id</param>
+        /// <param name="quantity">Initial Quantity</param>
+        public Inventory(int id, int quantity)
+        {
+            this.ProductId = id;
+            this.Quantity = quantity;
+        }
+
         public void AddInventory(int quantity)
         {
             //check to make sure that new quantity is greater than zero
