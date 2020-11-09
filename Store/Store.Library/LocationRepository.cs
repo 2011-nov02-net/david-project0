@@ -68,5 +68,22 @@ namespace Store.Library
         {
             return _location.First(l => l.Id == id);
         }
+
+        /// <summary>
+        /// Get a location with a given name, will only return the first instance
+        /// </summary>
+        /// <remarks>
+        /// This will only return first instance of the location
+        /// As the repo only requires unique id values, there could be 
+        /// multiple locations with the same name.
+        /// Better to use GetLocation(int id) as
+        /// that is a unique value
+        /// </remarks>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Location GetLocation(string name)
+        {
+            return _location.First(l => l.Name == name);
+        }
     }
 }
