@@ -12,6 +12,8 @@ namespace Store.Library
         private int _id;
         // backing field for "Price" field
         private decimal _price;
+        //backing field for "OrderLimit" field
+        private int _orderLimit;
 
         /// <summary>
         /// The Name of the Product, must have a value
@@ -66,12 +68,26 @@ namespace Store.Library
         /// </summary>
         public string Description { get; set; }
 
-        public Product(string name, int id, decimal price, string description)
+        public int OrderLimit
+        {
+            get { return _orderLimit; }
+            set
+            {
+                // make sure that the number is positive
+                if (value > 0)
+                    this._orderLimit = value;
+                else
+                    throw new ArgumentOutOfRangeException("OrderLimit", "OrderLimit must have a positive value");
+            }
+        }
+
+        public Product(string name, int id, decimal price, string description, int orderLimit)
         {
             this.Name = name;
             this.Id = id;
             this.Price = price;
             this.Description = description;
+            this.OrderLimit = orderLimit;
         }
     }
 }
