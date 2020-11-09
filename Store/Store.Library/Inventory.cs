@@ -67,13 +67,17 @@ namespace Store.Library
         {
             //check to make sure that new quantity is greater than zero
             if (quantity <= 0)
-                throw new ArgumentOutOfRangeException("quantity", "The quantity to add to Inventory must be a positive value");
+                throw new ArgumentOutOfRangeException("Add Quantity", "The quantity to add to Inventory must be a positive value");
             this.Quantity += quantity;
         }
 
         public void SellInventory(int quantity)
         {
-            throw new NotImplementedException("Not Implemented");
+            //make sure quantity <= inventory quantity
+            if (quantity <= this.Quantity)
+                this.Quantity -= quantity;
+            else
+                throw new ArgumentOutOfRangeException("Sell Quantity", "Attempt to sell more than currently in stock at location");
         }
     }
 }
