@@ -103,6 +103,14 @@ namespace Store.Library
             this.Quantity = quantity;
         }
 
+        /// <summary>
+        /// AddInventory to the product
+        /// </summary>
+        /// <remarks>
+        /// Since the product is tied to the inventory we don't have to search for it here
+        /// The Location will handle all searching and maintaining features
+        /// </remarks>
+        /// <param name="quantity">The Quantity to add</param>
         public void AddInventory(int quantity)
         {
             //check to make sure that new quantity is greater than zero
@@ -111,6 +119,15 @@ namespace Store.Library
             this.Quantity += quantity;
         }
 
+        /// <summary>
+        /// SellInventory sells the product
+        /// </summary>
+        /// <remarks>
+        /// Will check to make sure that there is enough quantity to
+        /// make the sale, if not, it will throw an
+        /// ArgumentOutOfRangeException
+        /// </remarks>
+        /// <param name="quantity">The Quantity to Sell</param>
         public void SellInventory(int quantity)
         {
             //make sure quantity <= inventory quantity
@@ -120,9 +137,16 @@ namespace Store.Library
                 throw new ArgumentOutOfRangeException("Sell Quantity", "Attempt to sell more than currently in stock at location");
         }
 
+        /// <summary>
+        /// Get what product it is
+        /// </summary>
+        /// <remarks>
+        /// gets the product information and returns it as an object
+        /// </remarks>
+        /// <returns>The Product</returns>
         public Product GetProduct()
         {
-            throw new NotImplementedException("Not implemented");
+            return ProductObj;
         }
     }
 }
