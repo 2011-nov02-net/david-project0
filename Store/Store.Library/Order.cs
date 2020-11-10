@@ -28,12 +28,13 @@ namespace Store.Library
             return SalesList.Sum(sale => sale.ProductObj.Price * sale.SaleQuantity);
         }
 
-        public Order(int custId, int locId, List<Sale> sales, DateTime date)
+        public Order(int custId, int locId, List<Sale> sales, DateTime date, int orderNumber)
         {
             this.CustomerId = custId;
             this.LocationId = locId;
             this.SalesList = sales;
             this.Date = date;
+            this.OrderNumber = orderNumber;
         }
     }
 }
