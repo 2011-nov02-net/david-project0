@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Store.Library
 {
-    class CustomerRepository
+    public class CustomerRepository
     {
         private readonly ICollection<Customer> _customer;
         private static int _idCounter;
@@ -73,6 +73,11 @@ namespace Store.Library
         public ICollection<Customer> GetAllCustomers()
         {
             return new List<Customer>(_customer);
+        }
+
+        public bool IsCustomer(int id)
+        {
+            return _customer.Any(c => c.Id == id);
         }
     }
 }
