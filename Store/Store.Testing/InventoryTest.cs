@@ -73,5 +73,22 @@ namespace Store.Testing
             Assert.Equal(prod.Description, getProd.Description);
             Assert.Equal(prod.OrderLimit, getProd.OrderLimit);
         }
+
+        [Fact]
+        public void GetProductFromInventory_ProductInInventoryWithNoQuantity()
+        {
+            // store product
+            Inventory inventory = new Inventory(prod);
+
+            // get product
+            Product getProd = inventory.GetProduct();
+
+            Assert.Equal(prod.Name, getProd.Name);
+            Assert.Equal(prod.Id, getProd.Id);
+            Assert.Equal(prod.Price, getProd.Price);
+            Assert.Equal(prod.Description, getProd.Description);
+            Assert.Equal(prod.OrderLimit, getProd.OrderLimit);
+        }
+
     }
 }
