@@ -74,6 +74,7 @@ namespace Store.Library
         {
             this.ProductId = id;
             this.Quantity = quantity;
+            this.ProductObj = new Product("Empty", id, 1.0m, null, quantity + 1);
         }
 
         /// <summary>
@@ -125,16 +126,22 @@ namespace Store.Library
         /// <remarks>
         /// Will check to make sure that there is enough quantity to
         /// make the sale, if not, it will throw an
-        /// ArgumentOutOfRangeException
+        /// ArgumentOutOfRangeException. Also checks against the order
+        /// limit to make sure the product isn't being over sold.
         /// </remarks>
         /// <param name="quantity">The Quantity to Sell</param>
         public void SellInventory(int quantity)
         {
-            //make sure quantity <= inventory quantity
-            if (quantity <= this.Quantity)
+            //make sure quantity <= inventory quantity and that we don't hit the order limit of the product
+            if (quantity <= this.Quantity && quantity <= ProductObj.OrderLimit)
                 this.Quantity -= quantity;
             else
-                throw new ArgumentOutOfRangeException("Sell Quantity", "Attempt to sell more than currently in stock at location");
+            {
+                if (quantity > this.Quantity)
+                    throw new ArgumentOutOfRangeException("Sell Quantity", "Attempt to sell more than currently in stock at location.");
+                else
+                    throw new ArgumentOutOfRangeException("Sell Quantity", "Attempt to sell more than the order limit of the product.");
+            }
         }
 
         /// <summary>
