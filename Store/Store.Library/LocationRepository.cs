@@ -85,5 +85,10 @@ namespace Store.Library
         {
             return _location.First(l => l.Name == name);
         }
+
+        public ICollection<Location> GetAllLocations()
+        {
+            return _location;
+        }
     }
 }
