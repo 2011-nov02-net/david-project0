@@ -86,9 +86,23 @@ namespace Store.Library
             return _location.First(l => l.Name == name);
         }
 
+        /// <summary>
+        /// Gets a new list of all locations
+        /// </summary>
+        /// <returns>All Locations</returns>
         public ICollection<Location> GetAllLocations()
         {
-            return _location;
+            return new List<Location>(_location);
+        }
+
+        /// <summary>
+        /// check to see if the id given is an actual location
+        /// </summary>
+        /// <param name="id">The id we want to check</param>
+        /// <returns>True if location exists, False otherwise</returns>
+        public bool IsLocation(int id)
+        {
+            return _location.Any(l => l.Id == id);
         }
     }
 }
