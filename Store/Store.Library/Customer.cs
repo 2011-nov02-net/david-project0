@@ -55,5 +55,14 @@ namespace Store.Library
             }
         }
 
+        public Customer(string firstName, string lastName, int id)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Id = id;
+        }
+
+        public Customer() { }
+
     }
 }
