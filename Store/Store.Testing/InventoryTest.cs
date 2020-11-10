@@ -66,6 +66,12 @@ namespace Store.Testing
 
             // get product
             Product getProd = inventory.GetProduct();
+
+            Assert.Equal(prod.Name, getProd.Name);
+            Assert.Equal(prod.Id, getProd.Id);
+            Assert.Equal(prod.Price, getProd.Price);
+            Assert.Equal(prod.Description, getProd.Description);
+            Assert.Equal(prod.OrderLimit, getProd.OrderLimit);
         }
     }
 }
