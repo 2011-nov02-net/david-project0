@@ -119,5 +119,10 @@ namespace Store.Library
             else
                 throw new ArgumentOutOfRangeException("Sell Quantity", "Attempt to sell more than currently in stock at location");
         }
+
+        public Product GetProduct()
+        {
+            throw new NotImplementedException("Not implemented");
+        }
     }
 }

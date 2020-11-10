@@ -7,6 +7,7 @@ namespace Store.Testing
     public class InventoryTest
     {
         int productId = 1;
+        Product prod = new Product("Battery", 1, 10.0m, "Batteries", 10);
 
         [Theory]
         [InlineData(1)]
@@ -55,6 +56,16 @@ namespace Store.Testing
             Inventory inventory = new Inventory(productId, value);
 
             Assert.ThrowsAny<ArgumentException>(() => inventory.SellInventory(value + 1));
+        }
+
+        [Fact]
+        public void GetProductFromInventory_ProductInInventoryWithQuantity()
+        {
+            // store product
+            Inventory inventory = new Inventory(prod, 10);
+
+            // get product
+            Product getProd = inventory.GetProduct();
         }
     }
 }
