@@ -69,12 +69,20 @@ namespace Store.Library
             return _customer.First(c => c.Id == id);
         }
 
-
+        /// <summary>
+        /// Gets a new list of all customers
+        /// </summary>
+        /// <returns>All Customers</returns>
         public ICollection<Customer> GetAllCustomers()
         {
             return new List<Customer>(_customer);
         }
 
+        /// <summary>
+        /// check to see if the id given is an actual customer
+        /// </summary>
+        /// <param name="id">The id we want to check</param>
+        /// <returns>True if customer exists, False otherwise</returns>
         public bool IsCustomer(int id)
         {
             return _customer.Any(c => c.Id == id);
