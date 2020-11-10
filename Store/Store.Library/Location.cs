@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -45,12 +46,106 @@ namespace Store.Library
             }
         }
 
+        public ICollection<Inventory> LocationInventory { get; }
+
         public Location(string name, int id)
         {
             this.Name = name;
             this.Id = id;
+            this.LocationInventory = new List<Inventory>();
         }
 
-        public Location() { }
+        public Location() 
+        {
+            this.LocationInventory = new List<Inventory>();
+        }
+
+        /// <summary>
+        /// Adds inventory to the location
+        /// </summary>
+        /// <remarks>
+        /// Will check to see if product exitst before adding. If product does exist it will get the inventory
+        /// of that product and add directly to it. Both methods have to be within try catch blocks as the 
+        /// .AddInventory will throw an error if the quantity is less than 1.  Returns true if Inventory
+        /// was added, false if inventory was not added.
+        /// </remarks>
+        /// <param name="prod">Product Want to Add</param>
+        /// <param name="quantity">Amount of Product Quantity</param>
+        /// <returns>True if Successful, False otherwise</returns>
+        public bool AddItemToInventory(Product prod, int quantity)
+        {
+            // check to see if product already exits
+            if(CheckInventoryForProduct(prod))
+            {
+                // product already exists, add to existing inventory
+                try
+                {
+                    (LocationInventory.First(p => p.ProductObj.Id == prod.Id)).AddInventory(quantity);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Product does not already exist in the inventory
+                // add it
+                try
+                {
+                    LocationInventory.Add(new Inventory(prod, quantity));
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Sell a certain Quantity from Inventory
+        /// </summary>
+        /// <remarks>
+        /// Will check to see if the product exists, if it does will try
+        /// to sell the inventory from it.
+        /// Will return true if SellInventory was successful,
+        /// will return false if not.
+        /// </remarks>
+        /// <param name="prod">The Product</param>
+        /// <param name="quantity">Quantity to sell</param>
+        /// <returns>True if Successful, False otherwise</returns>
+        public bool SellItemFromInventory(Product prod, int quantity)
+        {
+            //get and check product
+            if(CheckInventoryForProduct(prod))
+            {
+                try
+                {
+                    LocationInventory.First(p => p.ProductObj.Id == prod.Id).SellInventory(quantity);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Inventory does not exist for this product, return false
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check to see if the product exists
+        /// </summary>
+        /// <param name="prod">The Product</param>
+        /// <returns>True if exists, False otherwise</returns>
+        public bool CheckInventoryForProduct(Product prod)
+        {
+            return LocationInventory.Any(p => p.ProductObj.Id == prod.Id);
+        }
     }
 }
