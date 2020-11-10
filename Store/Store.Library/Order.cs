@@ -11,6 +11,17 @@ namespace Store.Library
         public int LocationId { get; set; }
         public ICollection<Sale> SalesList { get; set; }
         public DateTime Date { get; set; }
+        public int OrderNumber
+        {
+            get { return OrderNumber; }
+            private set
+            {
+                if (value > 0)
+                    this.OrderNumber = value;
+                else
+                    throw new ArgumentOutOfRangeException("OrderNumber", "OrderNumber must be positive");
+            }
+        }
 
         public decimal GetTotalOfOrder()
         {
