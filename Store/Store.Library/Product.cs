@@ -89,8 +89,5 @@ namespace Store.Library
             this.Description = description;
             this.OrderLimit = orderLimit;
         }
-
-        public Product() : this(null,0,0m,null,0)
-        {}
     }
 }
