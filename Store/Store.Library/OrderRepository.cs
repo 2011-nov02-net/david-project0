@@ -22,12 +22,12 @@ namespace Store.Library
             _orderIdCounter = 1;
         }
 
-        public void AddOrder(Order order)
+        public void AddOrder(int custId, int locId, List<Sale> sales, DateTime date)
         {
-            if (IsPrevOrder(order))
-                throw new AccessViolationException();
-            else
-                _orders.Add(order);
+            //create the new order
+            Order order = new Order(custId, locId, sales, date, _orderIdCounter);
+            _orderIdCounter++;
+            _orders.Add(order);
         }
 
         public List<Order> GetAllOrders()
