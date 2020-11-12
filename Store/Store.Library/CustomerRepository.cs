@@ -34,7 +34,7 @@ namespace Store.Library
         /// Add a location to the list of locations
         /// </summary>
         /// <param name="location">The location to be added</param>
-        public void AddLocation(Customer customer)
+        public void AddCustomer(Customer customer)
         {
             if (_customer.Any(c => c.Id == customer.Id))
             {
