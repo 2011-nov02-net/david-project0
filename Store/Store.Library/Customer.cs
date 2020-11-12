@@ -10,6 +10,8 @@ namespace Store.Library
         private string _firstName;
         // backing field for "LastName" property
         private string _lastName;
+        // Backing field for "Id" property
+        private int _id;
 
         /// <summary>
         /// The customer's first name, Must have a value
@@ -45,11 +47,11 @@ namespace Store.Library
         }
 
         public int Id {
-            get { return Id; }
+            get { return _id; }
             private set
             {
                 if (value > 0)
-                    this.Id = value;
+                    this._id = value;
                 else
                     throw new ArgumentOutOfRangeException("id", "Id must be positive");
             }
