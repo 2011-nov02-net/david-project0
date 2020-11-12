@@ -25,10 +25,11 @@ namespace Store.ConsoleApp
         {
             Console.Clear();
             Console.WriteLine("Welcome to Store!");
+            Console.WriteLine(ses.ShowCurrentCustomer());
             Console.WriteLine("Please Select From the Following Options: ");
             Console.WriteLine("(1) Add Customer");
             Console.WriteLine("(2) View All Customers");
-            Console.WriteLine("(3) Select Customer");
+            Console.WriteLine("(3) Change Customer");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -107,6 +108,9 @@ namespace Store.ConsoleApp
                     input = -1;
                 }
             }
+
+            // have a customer id, tell the session to remember that
+            ses.SetCurrentCustomer(input);
         }
 
         public static void WaitOnKeyPress()
