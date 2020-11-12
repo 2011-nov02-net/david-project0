@@ -66,5 +66,17 @@ namespace Store.Library
 
         public Customer() { }
 
+        /// <summary>
+        /// Override of ToString methdo
+        /// </summary>
+        /// <remarks>
+        /// Just returns the first name concatinated witht he second string to return the name
+        /// </remarks>
+        /// <returns>Full Name</returns>
+        public override string ToString()
+        {
+            return FirstName + " " + LastName;
+        }
+
     }
 }
