@@ -10,6 +10,7 @@ namespace Store.Library
         public LocationRepository Locations { get; set; }
         public CustomerRepository Customers { get; set; }
         public OrderRepository Orders { get; set; }
+        public Customer CurrentCustomer { get; set; } = null;
 
         public Session()
         {
@@ -31,9 +32,14 @@ namespace Store.Library
             return new List<Customer>(Customers.GetAllCustomers());
         }
 
-        public bool SetCurrentCustomer(int id)
+        public void SetCurrentCustomer(int id)
         {
-            return false;
+            CurrentCustomer = Customers.GetCustomer(id);
+        }
+
+        public string ShowCurrentCustomer()
+        {
+            return CurrentCustomer?.ToString() ?? "No Customer Currently Selected";
         }
 
         // ---------------------------------------------------------------------
