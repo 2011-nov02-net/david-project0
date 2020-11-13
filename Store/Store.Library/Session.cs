@@ -8,9 +8,11 @@ namespace Store.Library
     {
         //session variables
         public LocationRepository Locations { get; set; }
-        public CustomerRepository Customers { get; set; }
+
+        public CustomerRepository Customers;
         public OrderRepository Orders { get; set; }
         public Customer CurrentCustomer { get; set; } = null;
+        public Location CurrentLocation { get; set; } = null;
 
         public Session()
         {
@@ -40,6 +42,44 @@ namespace Store.Library
         public string ShowCurrentCustomer()
         {
             return CurrentCustomer?.ToString() ?? "No Customer Currently Selected";
+        }
+
+        public bool IsCustomer(int id)
+        {
+            return Customers.IsCustomer(id);
+        }
+
+        public int NumOfCurrentCustomers()
+        {
+            return Customers.NumberOfCustomers();
+        }
+
+        // ---------------------------------------------------------------------
+        // All Location related Session Methods go here
+
+        public void AddLocation(string name)
+        {
+            Locations.AddLocation(Locations.CreateLocation(name));
+        }
+
+        public List<Location> GetAllLocations()
+        {
+            return new List<Location>(Locations.GetAllLocations());
+        }
+
+        public void SetCurrentLocation(int id)
+        {
+            CurrentLocation = Locations.GetLocation(id);
+        }
+
+        public string ShowCurrentLocation()
+        {
+            return CurrentLocation?.ToString() ?? "No Location Currently Selected";
+        }
+
+        public int NumOfCurrentLocations()
+        {
+            return Locations.NumberOfLocations();
         }
 
         // ---------------------------------------------------------------------
