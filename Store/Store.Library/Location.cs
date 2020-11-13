@@ -147,5 +147,17 @@ namespace Store.Library
         {
             return LocationInventory.Any(p => p.ProductObj.Id == prod.Id);
         }
+
+        /// <summary>
+        /// Override of ToString method
+        /// </summary>
+        /// <remarks>
+        /// Just returns the name of the store
+        /// </remarks>
+        /// <returns>Name of store</returns>
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
