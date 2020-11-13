@@ -25,11 +25,15 @@ namespace Store.ConsoleApp
         {
             Console.Clear();
             Console.WriteLine("Welcome to Store!");
-            Console.WriteLine(ses.ShowCurrentCustomer());
+            Console.WriteLine("Customer: " + ses.ShowCurrentCustomer());
+            Console.WriteLine("Location: " + ses.ShowCurrentLocation());
             Console.WriteLine("Please Select From the Following Options: ");
             Console.WriteLine("(1) Add Customer");
             Console.WriteLine("(2) View All Customers");
             Console.WriteLine("(3) Change Customer");
+            Console.WriteLine("(4) Add Location");
+            Console.WriteLine("(5) View All Locations");
+            Console.WriteLine("(6) Select Location");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -54,12 +58,26 @@ namespace Store.ConsoleApp
                     PrintAllCustomersConsole();
                     GetAndSetCustomerSelection();
                     break;
+                case "4":
+                    AddLocationConsole();
+                    break;
+                case "5":
+                    PrintAllLocationsConsole();
+                    WaitOnKeyPress();
+                    break;
+                case "6":
+                    PrintAllLocationsConsole();
+                    GetAndSetLocationSelection();
+                    break;
                 case "x":
                     cont = false;
                     ses.CloseSession();
                     break;
             }
         }
+
+        //--------------------------------------------------------------------
+        // Customer Console
 
         public static void AddCustomerConsole()
         {
@@ -73,44 +91,122 @@ namespace Store.ConsoleApp
 
         public static void PrintAllCustomersConsole()
         {
-            var customers = ses.GetAllCustomers();
-
             Console.Clear();
 
-            foreach (Customer cust in customers)
+            if (!(ses.NumOfCurrentCustomers() == 0))
             {
-                Console.WriteLine("First Name\t| Last Name\t| Customer ID");
-                Console.WriteLine($"{cust.FirstName}\t| {cust.LastName}\t| {cust.Id}");
+                var customers = ses.GetAllCustomers();
+                foreach (Customer cust in customers)
+                {
+                    Console.WriteLine("First Name\t| Last Name\t| Customer ID");
+                    Console.WriteLine($"{cust.FirstName}\t| {cust.LastName}\t| {cust.Id}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No Customers Currently in System.");
             }
         }
 
         public static void GetAndSetCustomerSelection()
         {
-            //since we have already displayed all customers we can just get the selection here
-            int input = -1;
-            while (input <= 0)
+            if (!(ses.NumOfCurrentCustomers() == 0))
             {
-                Console.Write("Please enter your Customer Id: ");
-                try
+                //since we have already displayed all customers we can just get the selection here
+                int input = -1;
+                while (input <= 0)
                 {
-                    input = Int32.Parse(Console.ReadLine());
+                    Console.Write("Please enter your Customer Id: ");
+                    try
+                    {
+                        input = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+
+                    //check to see if the id given is an actual customer
+                    if (!ses.IsCustomer(input))
+                    {
+                        Console.WriteLine("Please enter a valid Customer ID");
+                        input = -1;
+                    }
                 }
-                catch (FormatException)
+                // have a customer id, tell the session to remember that
+                ses.SetCurrentCustomer(input);
+            }
+            else
+            {
+                WaitOnKeyPress();
+            }
+        }
+
+        //--------------------------------------------------------------------
+        // Location Console
+
+        public static void AddLocationConsole()
+        {
+            Console.Clear();
+            Console.WriteLine("Please provide Store Name:");
+            string name = Console.ReadLine();
+            ses.AddLocation(name);
+        }
+
+        public static void PrintAllLocationsConsole()
+        {
+            if (!(ses.NumOfCurrentLocations() == 0))
+            {
+                var locations = ses.GetAllLocations();
+
+                Console.Clear();
+
+                foreach (Location location in locations)
                 {
-                    Console.WriteLine("Please Enter a valid number");
-                    continue;
-                }
-                
-                //check to see if the id given is an actual customer
-                if(!ses.Customers.IsCustomer(input))
-                {
-                    Console.WriteLine("Please enter a valid Customer ID");
-                    input = -1;
+                    Console.WriteLine("Store Name\t| Location ID");
+                    Console.WriteLine($"{location.Name}\t| {location.Id}");
                 }
             }
+            else
+            {
+                Console.WriteLine("No Locations Currently in System.");
+            }    
+        }
 
-            // have a customer id, tell the session to remember that
-            ses.SetCurrentCustomer(input);
+        public static void GetAndSetLocationSelection()
+        {
+            if (ses.NumOfCurrentLocations() > 0)
+            {
+                //since we have already displayed all customers we can just get the selection here
+                int input = -1;
+                while (input <= 0)
+                {
+                    Console.Write("Please enter the Location Id: ");
+                    try
+                    {
+                        input = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+
+                    //check to see if the id given is an actual customer
+                    if (!ses.Customers.IsCustomer(input))
+                    {
+                        Console.WriteLine("Please enter a valid Location ID");
+                        input = -1;
+                    }
+                }
+                // have a customer id, tell the session to remember that
+                ses.SetCurrentLocation(input);
+            }
+            else
+            {
+                WaitOnKeyPress();
+            }
         }
 
         public static void WaitOnKeyPress()
