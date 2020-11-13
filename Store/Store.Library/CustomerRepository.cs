@@ -36,11 +36,14 @@ namespace Store.Library
         /// <param name="location">The location to be added</param>
         public void AddCustomer(Customer customer)
         {
-            if (_customer.Any(c => c.Id == customer.Id))
+            if (!(customer == null))
             {
-                throw new InvalidOperationException($"Location with ID {customer.Id} already exits.");
+                if (_customer.Any(c => c.Id == customer?.Id))
+                {
+                    throw new InvalidOperationException($"Location with ID {customer.Id} already exits.");
+                }
+                _customer.Add(customer);
             }
-            _customer.Add(customer);
         }
 
         /// <summary>
@@ -54,7 +57,15 @@ namespace Store.Library
         /// <returns>The Location</returns>
         public Customer CreateCustomer(string firstName, string lastName)
         {
-            Customer customer = new Customer(firstName, lastName, _idCounter);
+            Customer customer;
+            try
+            {
+                customer = new Customer(firstName, lastName, _idCounter);
+            }
+            catch(ArgumentException)
+            {
+                return null;
+            }
             _idCounter++;
             return customer;
         }
@@ -86,6 +97,11 @@ namespace Store.Library
         public bool IsCustomer(int id)
         {
             return _customer.Any(c => c.Id == id);
+        }
+
+        public int NumberOfCustomers()
+        {
+            return _customer.Count;
         }
     }
 }
