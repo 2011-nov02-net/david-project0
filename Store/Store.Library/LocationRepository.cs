@@ -36,11 +36,14 @@ namespace Store.Library
         /// <param name="location">The location to be added</param>
         public void AddLocation(Location location)
         {
-            if(_location.Any(l => l.Id == location.Id))
+            if (!(location == null))
             {
-                throw new InvalidOperationException($"Location with ID {location.Id} already exits.");
+                if (_location.Any(l => l.Id == location.Id))
+                {
+                    throw new InvalidOperationException($"Location with ID {location.Id} already exits.");
+                }
+                _location.Add(location);
             }
-            _location.Add(location);
         }
 
         /// <summary>
@@ -54,7 +57,15 @@ namespace Store.Library
         /// <returns>The Location</returns>
         public Location CreateLocation(string name)
         {
-            Location location = new Location(name, _idCounter);
+            Location location;
+            try
+            {
+                location = new Location(name, _idCounter);
+            }
+            catch(ArgumentException)
+            {
+                return null;
+            }
             _idCounter++;
             return location;
         }
@@ -103,6 +114,11 @@ namespace Store.Library
         public bool IsLocation(int id)
         {
             return _location.Any(l => l.Id == id);
+        }
+
+        public int NumberOfLocations()
+        {
+            return _location.Count;
         }
     }
 }
