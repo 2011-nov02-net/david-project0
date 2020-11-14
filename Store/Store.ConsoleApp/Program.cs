@@ -96,7 +96,7 @@ namespace Store.ConsoleApp
             if (!(ses.NumOfCurrentCustomers() == 0))
             {
                 var customers = ses.GetAllCustomers();
-                foreach (Customer cust in customers)
+                foreach (var cust in customers)
                 {
                     Console.WriteLine("First Name\t|Last Name\t | Customer ID");
                     Console.WriteLine($"{cust.FirstName,16}|{cust.LastName,16}| {cust.Id}");
@@ -163,7 +163,7 @@ namespace Store.ConsoleApp
 
                 Console.Clear();
 
-                foreach (Location location in locations)
+                foreach (var location in locations)
                 {
                     Console.WriteLine("Store Name\t| Location ID");
                     Console.WriteLine($"{location.Name}\t| {location.Id}");
