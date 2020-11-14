@@ -98,8 +98,9 @@ namespace Store.ConsoleApp
                 var customers = ses.GetAllCustomers();
                 foreach (Customer cust in customers)
                 {
-                    Console.WriteLine("First Name\t| Last Name\t| Customer ID");
-                    Console.WriteLine($"{cust.FirstName}\t| {cust.LastName}\t| {cust.Id}");
+                    Console.WriteLine("First Name\t|Last Name\t | Customer ID");
+                    Console.WriteLine($"{cust.FirstName,16}|{cust.LastName,16}| {cust.Id}");
+                    Console.WriteLine("----------------------------------------------");
                 }
             }
             else
