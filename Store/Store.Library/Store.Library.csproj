@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="dbo.Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Store.DatabaseModels\Store.DatabaseModels.csproj" />
   </ItemGroup>
 
