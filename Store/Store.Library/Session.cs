@@ -122,6 +122,11 @@ namespace Store.Library
             return Locations.AddLocationInventory(CurrentLocation, productId, quantity);
         }
 
+        public bool RemoveLocationInventory(int productId)
+        {
+            return Locations.RemoveLocationInventory(CurrentLocation, productId);
+        }
+
         // ---------------------------------------------------------------------
         // All Product related Session Methods go here
 

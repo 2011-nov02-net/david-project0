@@ -38,6 +38,7 @@ namespace Store.ConsoleApp
             Console.WriteLine("(5) View All Locations");
             Console.WriteLine("(6) Select Location");
             Console.WriteLine("(7) View Inventory at Location");
+            Console.WriteLine("(8) Modify Inventory at Location");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -78,7 +79,7 @@ namespace Store.ConsoleApp
                     WaitOnKeyPress();
                     break;
                 case "8":
-                    AddToCurrentLocationInventory();
+                    ModifyCurrentLocationInventory();
                     WaitOnKeyPress();
                     break;
                 case "x":
@@ -252,15 +253,15 @@ namespace Store.ConsoleApp
             }
         }
 
-        public static void AddToCurrentLocationInventory()
+        public static void ModifyCurrentLocationInventory()
         {
             Console.Clear();
             PrintLocationInventory();
             // ask if user wants to add to previous inventory or create new item\
             string input = null;
-            while (input != "a" && input != "c")
+            while (input != "a" && input != "c" && input != "r")
             {
-                Console.Write("(A)dd to existing product or (C)reate new product: ");
+                Console.Write("(A)dd/(R)emove existing product or (C)reate new product: ");
                 input = Console.ReadLine().ToLower();
 
             }
@@ -268,6 +269,14 @@ namespace Store.ConsoleApp
             if (input == "a")
             {
                 AddExistingInventory();
+            }
+            else if (input == "c")
+            {
+                AddNewInventory();
+            }
+            else;
+            {
+                RemoveExisitingInventory();
             }
 
         }
@@ -322,6 +331,49 @@ namespace Store.ConsoleApp
             {
                 Console.WriteLine("Error adding to inventory");
             }
+        }
+
+        public static void AddNewInventory()
+        {
+            //get name of item to add
+
+
+        }
+
+        public static void RemoveExisitingInventory()
+        {
+            int productInput = -1;
+            while (productInput <= 0)
+            {
+                Console.Clear();
+                PrintLocationInventory();
+                Console.Write("Please enter the Product Id to remove inventory: ");
+                try
+                {
+                    productInput = Int32.Parse(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please Enter a valid number");
+                    continue;
+                }
+
+                //check to see if the id given is an actual customer
+                if (!ses.IsInLocationInventory(productInput))
+                {
+                    Console.WriteLine("Please enter a valid Product ID");
+                    productInput = -1;
+                }
+            }
+
+            if (ses.RemoveLocationInventory(productInput))
+            {
+                Console.WriteLine("Product Removed from Inventory.");
+            }
+            else
+            {
+                Console.WriteLine("Error Removing Product from Inventory");
+            }    
         }
 
         public static void WaitOnKeyPress()

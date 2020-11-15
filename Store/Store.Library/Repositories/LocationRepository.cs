@@ -146,10 +146,13 @@ namespace Store.Library
         {
             // set up context
             using var context = new Project0Context(_dbContext);
+            // get first match in inventory that matches the location id and the product id
             var inventory = context.Inventories.First(i => i.LocationId == location.Id && i.ProductId == productId);
 
+            //nested in a try catch block so we can report an error to the user
             try
             {
+                // attempt to add inventory
                 inventory.Quantity += quantity;
                 context.SaveChanges();
             }
@@ -158,6 +161,25 @@ namespace Store.Library
                 return false;
             }
             
+            return true;
+        }
+
+        public bool RemoveLocationInventory(Location location, int productId)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            // nest in a try catch block to report error to user
+            try
+            {
+                context.Remove(context.Inventories.First(i => i.LocationId == location.Id && i.ProductId == productId));
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
+
             return true;
         }
     }
