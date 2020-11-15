@@ -116,24 +116,49 @@ namespace Store.Library
             using var context = new Project0Context(_dbContext);
 
             // get the inventory for each location
-            var dbInventory = context.Inventories.Where(l => l.LocationId == location.Id).ToList();
+            var dbInventory = context.Inventories.Where(l => l.LocationId == location.Id).Include(l => l.Product).ToList();
 
             // get the products related to each
             var inventory = new List<Inventory>();
 
             foreach(var item in dbInventory)
             {
-                // get the product
-                var dbProduct = context.Products.First(i => i.Id == item.ProductId);
-
                 // create our converted product
-                Product prod = new Product(dbProduct.Name, dbProduct.Id, dbProduct.Price, dbProduct.Description, dbProduct.OrderLimit);
+                Product prod = new Product(item.Product.Name, item.Product.Id, item.Product.Price, item.Product.Description, item.Product.OrderLimit);
 
                 // create the new inventory
                 inventory.Add(new Inventory(prod, item.Quantity));
             }
 
             return inventory;
+        }
+
+        public bool IsInLocationInventory(Location location, int productId)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            //search the inventory with location id and product ID
+            return context.Inventories.Any(i => i.LocationId == location.Id && i.ProductId == productId);
+        }
+
+        public bool AddLocationInventory(Location location, int productId, int quantity)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+            var inventory = context.Inventories.First(i => i.LocationId == location.Id && i.ProductId == productId);
+
+            try
+            {
+                inventory.Quantity += quantity;
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
 }

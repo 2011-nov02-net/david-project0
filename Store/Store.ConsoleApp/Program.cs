@@ -77,6 +77,10 @@ namespace Store.ConsoleApp
                     PrintLocationInventory();
                     WaitOnKeyPress();
                     break;
+                case "8":
+                    AddToCurrentLocationInventory();
+                    WaitOnKeyPress();
+                    break;
                 case "x":
                     cont = false;
                     ses.CloseSession();
@@ -245,6 +249,78 @@ namespace Store.ConsoleApp
             else
             {
                 Console.WriteLine("No store currently selected, Please select a store.");
+            }
+        }
+
+        public static void AddToCurrentLocationInventory()
+        {
+            Console.Clear();
+            PrintLocationInventory();
+            // ask if user wants to add to previous inventory or create new item\
+            string input = null;
+            while (input != "a" && input != "c")
+            {
+                Console.Write("(A)dd to existing product or (C)reate new product: ");
+                input = Console.ReadLine().ToLower();
+
+            }
+
+            if (input == "a")
+            {
+                AddExistingInventory();
+            }
+
+        }
+
+        public static void AddExistingInventory()
+        {
+            //since we have already displayed all the inventory at the location we can just get the selection here
+            int productInput = -1;
+            while (productInput <= 0)
+            {
+                Console.Clear();
+                PrintLocationInventory();
+                Console.Write("Please enter the Product Id to add inventory to: ");
+                try
+                {
+                    productInput = Int32.Parse(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please Enter a valid number");
+                    continue;
+                }
+
+                //check to see if the id given is an actual customer
+                if (!ses.IsInLocationInventory(productInput))
+                {
+                    Console.WriteLine("Please enter a valid Product ID");
+                    productInput = -1;
+                }
+            }
+
+            int quantityToAdd = -1;
+            while (quantityToAdd <= 0)
+            {
+                Console.Write("Quantity to add: ");
+                try
+                {
+                    quantityToAdd = Int32.Parse(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please Enter a valid number");
+                    continue;
+                }
+            }
+
+            if (ses.AddLocationInventory(productInput, quantityToAdd))
+            {
+                Console.WriteLine($"{quantityToAdd} added to inventory!");
+            }
+            else
+            {
+                Console.WriteLine("Error adding to inventory");
             }
         }
 

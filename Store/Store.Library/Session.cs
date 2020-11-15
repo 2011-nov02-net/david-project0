@@ -112,6 +112,21 @@ namespace Store.Library
 
         }
 
+        public bool IsInLocationInventory(int id)
+        {
+            return Locations.IsInLocationInventory(CurrentLocation, id);
+        }
+
+        public bool AddLocationInventory(int productId, int quantity)
+        {
+            return Locations.AddLocationInventory(CurrentLocation, productId, quantity);
+        }
+
+        // ---------------------------------------------------------------------
+        // All Product related Session Methods go here
+
+
+
         // ---------------------------------------------------------------------
         // All Closing related Session Methods go here
 
