@@ -82,7 +82,7 @@ namespace Store.Library
                 {
                     (LocationInventory.First(p => p.ProductObj.Id == prod.Id)).AddInventory(quantity);
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
                     return false;
                 }
@@ -95,7 +95,7 @@ namespace Store.Library
                 {
                     LocationInventory.Add(new Inventory(prod, quantity));
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
                     return false;
                 }
@@ -124,7 +124,7 @@ namespace Store.Library
                 {
                     LocationInventory.First(p => p.ProductObj.Id == prod.Id).SellInventory(quantity);
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
                     return false;
                 }
