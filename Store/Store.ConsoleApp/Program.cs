@@ -274,7 +274,7 @@ namespace Store.ConsoleApp
             {
                 AddNewInventory();
             }
-            else;
+            else
             {
                 RemoveExisitingInventory();
             }
@@ -335,7 +335,115 @@ namespace Store.ConsoleApp
 
         public static void AddNewInventory()
         {
+            Console.Clear();
             //get name of item to add
+            string name = null;
+
+            while(name.Length == 0)
+            {
+                Console.Write("Name of Product: ");
+                name = Console.ReadLine();
+            }
+
+            if(ses.IsProduct(name))
+            {
+                Console.WriteLine("Existing Product!");
+                // is an existing item
+                var product = ses.GetProduct(name);
+                //get the quantity
+                int quantityToAdd = -1;
+                while (quantityToAdd <= 0)
+                {
+                    Console.Write($"Quantity to add to {product.Name}: ");
+                    try
+                    {
+                        quantityToAdd = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+                }
+
+                if (ses.AddLocationInventory(product, quantityToAdd))
+                {
+                    Console.WriteLine($"{quantityToAdd} added to inventory!");
+                }
+                else
+                {
+                    Console.WriteLine("Error adding to inventory");
+                }
+            }
+            else
+            {
+                // not already a product, gather information
+
+                // product description
+                string description = null;
+                while(description.Length <= 0)
+                {
+                    Console.Write("Product Description: ");
+                    description = Console.ReadLine();
+                }
+
+                // product price
+                decimal price = -1.0m;
+                while(price <= 0.0m)
+                {
+                    Console.Write($"Price of {name}: ");
+                    try
+                    {
+                        price = Decimal.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+                }
+
+                // order Limit
+                int orderLimit = -1;
+                while(orderLimit < 0)
+                {
+                    Console.Write($"Order Limit of {name}: ");
+                    try
+                    {
+                       orderLimit = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+                }
+
+                int quantity = -1;
+                while (quantity < 0)
+                {
+                    Console.Write($"Quantity of {name}: ");
+                    try
+                    {
+                        quantity = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+                }
+
+                if (ses.AddLocationNewInventory(name, description, price, orderLimit, quantity))
+                {
+                    Console.WriteLine($"{quantity}: {name} added to location inventory");
+                }
+                else
+                {
+                    Console.WriteLine("Error adding to inventory");
+                }
+            }
+
 
 
         }

@@ -164,6 +164,31 @@ namespace Store.Library
             return true;
         }
 
+        public bool AddLocationInventory(Location location, DatabaseModels.Product product, int quantity)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            // make the new inventory
+            var inventory = new DatabaseModels.Inventory
+            {
+                LocationId = location.Id,
+                Quantity = quantity,
+                ProductId = product.Id
+            };
+
+            // ensure that the save works successfully
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool RemoveLocationInventory(Location location, int productId)
         {
             // set up context

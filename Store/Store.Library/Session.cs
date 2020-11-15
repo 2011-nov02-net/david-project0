@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Store.DatabaseModels;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Store.Library.Repositories;
 
 namespace Store.Library
 {
@@ -17,6 +18,7 @@ namespace Store.Library
 
         public CustomerRepository Customers;
         public OrderRepository Orders { get; set; }
+        public ProductRepository Products { get; set; }
         public Customer CurrentCustomer { get; set; } = null;
         public Location CurrentLocation { get; set; } = null;
 
@@ -122,6 +124,18 @@ namespace Store.Library
             return Locations.AddLocationInventory(CurrentLocation, productId, quantity);
         }
 
+        public bool AddLocationInventory(DatabaseModels.Product product, int quantity)
+        {
+            return Locations.AddLocationInventory(CurrentLocation, product, quantity);
+        }
+
+        public bool AddLocationNewInventory(string name, string description, decimal price, int orderLimit, int quantity)
+        {
+            CreateProduct(name, description, price, orderLimit);
+            var product = GetProduct(name);
+            return Locations.AddLocationInventory(CurrentLocation, product, quantity);
+        }
+
         public bool RemoveLocationInventory(int productId)
         {
             return Locations.RemoveLocationInventory(CurrentLocation, productId);
@@ -129,6 +143,21 @@ namespace Store.Library
 
         // ---------------------------------------------------------------------
         // All Product related Session Methods go here
+
+        public bool IsProduct(string name)
+        {
+            return Products.IsProduct(name);
+        }
+
+        public DatabaseModels.Product GetProduct(string name)
+        {
+            return Products.GetProduct(name);
+        }
+
+        public void CreateProduct(string name, string description, decimal price, int orderLimit)
+        {
+            Products.AddDbProduct(name, description, price, orderLimit);
+        }
 
 
 
