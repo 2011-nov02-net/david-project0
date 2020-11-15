@@ -17,7 +17,7 @@ namespace Store.DatabaseModels
         public string Description { get; set; }
         public int Id { get; set; }
         public decimal Price { get; set; }
-        public int? OrderLimit { get; set; }
+        public int OrderLimit { get; set; }
 
         public virtual ICollection<Inventory> Inventories { get; set; }
         public virtual ICollection<Sale> Sales { get; set; }

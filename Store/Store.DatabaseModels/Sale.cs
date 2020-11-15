@@ -9,6 +9,7 @@ namespace Store.DatabaseModels
     {
         public int OrderNumber { get; set; }
         public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public decimal PurchasePrice { get; set; }
         public int Quantity { get; set; }
 

@@ -117,6 +117,10 @@ namespace Store.DatabaseModels
 
                 entity.ToTable("Sale");
 
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
                 entity.Property(e => e.PurchasePrice).HasColumnType("money");
 
                 entity.HasOne(d => d.OrderNumberNavigation)
