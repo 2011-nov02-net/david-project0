@@ -169,7 +169,8 @@ namespace Store.ConsoleApp
                 foreach (var location in locations)
                 {
                     Console.WriteLine("Store Name\t| Location ID");
-                    Console.WriteLine($"{location.Name}\t| {location.Id}");
+                    Console.WriteLine($"{location.Name, -16}| {location.Id}");
+                    Console.WriteLine("------------------------------");
                 }
             }
             else
@@ -198,7 +199,7 @@ namespace Store.ConsoleApp
                     }
 
                     //check to see if the id given is an actual customer
-                    if (!ses.Customers.IsCustomer(input))
+                    if (!ses.IsLocation(input))
                     {
                         Console.WriteLine("Please enter a valid Location ID");
                         input = -1;

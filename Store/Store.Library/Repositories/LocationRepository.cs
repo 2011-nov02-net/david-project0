@@ -39,40 +39,20 @@ namespace Store.Library
         /// Add a location to the list of locations
         /// </summary>
         /// <param name="location">The location to be added</param>
-        public void AddLocation(Location location)
+        public void AddLocation(string name)
         {
-            if (!(location == null))
-            {
-                if (_location.Any(l => l.Id == location.Id))
-                {
-                    throw new InvalidOperationException($"Location with ID {location.Id} already exits.");
-                }
-                _location.Add(location);
-            }
-        }
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
 
-        /// <summary>
-        /// Creates and returns the location object
-        /// </summary>
-        /// <remarks>
-        /// Make the Location with this method to ensure that the id gets set
-        /// sequentially
-        /// </remarks>
-        /// <param name="name">Name of the location</param>
-        /// <returns>The Location</returns>
-        public Location CreateLocation(string name)
-        {
-            Location location;
-            try
+            if (name.Length > 0)
             {
-                location = new Location(name, _idCounter);
+                // create the db model to add
+                DatabaseModels.Location location = new DatabaseModels.Location() { Name = name };
+
+                //add location to context and save
+                context.Add(location);
+                context.SaveChanges();
             }
-            catch(ArgumentException)
-            {
-                return null;
-            }
-            _idCounter++;
-            return location;
         }
 
         /// <summary>
@@ -82,24 +62,16 @@ namespace Store.Library
         /// <returns>The Location</returns>
         public Location GetLocation(int id)
         {
-            return _location.First(l => l.Id == id);
-        }
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
 
-        /// <summary>
-        /// Get a location with a given name, will only return the first instance
-        /// </summary>
-        /// <remarks>
-        /// This will only return first instance of the location
-        /// As the repo only requires unique id values, there could be 
-        /// multiple locations with the same name.
-        /// Better to use GetLocation(int id) as
-        /// that is a unique value
-        /// </remarks>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Location GetLocation(string name)
-        {
-            return _location.First(l => l.Name == name);
+            // find the location in the db that has said id
+            var dbLocation = context.Locations.FirstOrDefault(l => l.Id == id);
+
+            // check for null value
+            if (dbLocation == null) return null;
+
+            return new Location(dbLocation.Name, dbLocation.Id);
         }
 
         /// <summary>
@@ -108,7 +80,14 @@ namespace Store.Library
         /// <returns>All Locations</returns>
         public ICollection<Location> GetAllLocations()
         {
-            return new List<Location>(_location);
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            // get all locations from db
+            var dbLocations = context.Locations.ToList();
+
+            // convert and return
+            return dbLocations.Select(l => new Location(l.Name, l.Id)).ToList();
         }
 
         /// <summary>
@@ -118,12 +97,17 @@ namespace Store.Library
         /// <returns>True if location exists, False otherwise</returns>
         public bool IsLocation(int id)
         {
-            return _location.Any(l => l.Id == id);
+            // set up context
+            using var context = new Project0Context(_dbContext);
+            return context.Locations.Any(l => l.Id == id);
         }
 
         public int NumberOfLocations()
         {
-            return _location.Count;
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            return context.Locations.ToList().Count;
         }
     }
 }

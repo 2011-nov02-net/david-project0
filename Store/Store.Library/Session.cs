@@ -78,7 +78,7 @@ namespace Store.Library
 
         public void AddLocation(string name)
         {
-            Locations.AddLocation(Locations.CreateLocation(name));
+            Locations.AddLocation(name);
         }
 
         public List<Location> GetAllLocations()
@@ -99,6 +99,11 @@ namespace Store.Library
         public int NumOfCurrentLocations()
         {
             return Locations.NumberOfLocations();
+        }
+
+        public bool IsLocation(int id)
+        {
+            return Locations.IsLocation(id);
         }
 
         // ---------------------------------------------------------------------
