@@ -106,6 +106,12 @@ namespace Store.Library
             return Locations.IsLocation(id);
         }
 
+        public ICollection<Inventory> GetLocationInventory()
+        {
+            return Locations.GetLocationInventory(CurrentLocation);
+
+        }
+
         // ---------------------------------------------------------------------
         // All Closing related Session Methods go here
 

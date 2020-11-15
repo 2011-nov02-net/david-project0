@@ -37,6 +37,7 @@ namespace Store.ConsoleApp
             Console.WriteLine("(4) Add Location");
             Console.WriteLine("(5) View All Locations");
             Console.WriteLine("(6) Select Location");
+            Console.WriteLine("(7) View Inventory at Location");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -71,6 +72,10 @@ namespace Store.ConsoleApp
                 case "6":
                     PrintAllLocationsConsole();
                     GetAndSetLocationSelection();
+                    break;
+                case "7":
+                    PrintLocationInventory();
+                    WaitOnKeyPress();
                     break;
                 case "x":
                     cont = false;
@@ -211,6 +216,35 @@ namespace Store.ConsoleApp
             else
             {
                 WaitOnKeyPress();
+            }
+        }
+
+        public static void PrintLocationInventory()
+        {
+            Console.Clear();
+            // check to see if there is a location selected
+            if (!(ses.CurrentLocation == null))
+            {
+                // get the inventory from the session
+                var inventory = ses.GetLocationInventory();
+                // make sure that the store has inventory
+                if (inventory.Count > 0)
+                {
+                    foreach (var item in inventory)
+                    {
+                        var product = item.ProductObj;
+                        Console.WriteLine($"{product.Id}: {product.Name} | {product.Description} | {product.Price}");
+                        Console.WriteLine($"Quantity: {item.Quantity}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No inventory currently in this store");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No store currently selected, Please select a store.");
             }
         }
 

@@ -10,10 +10,7 @@ namespace Store.Library
         private int _productId;
         // backing field for "Quantity"'
         private int _quantity;
-        // backing field for "Product"
-        // private Product _productObj;
-
-
+        
         // Store an actual product instead of just an id,
         // If we store just an id here we will need a database of
         // products to query and we don't have that yet
@@ -51,7 +48,7 @@ namespace Store.Library
             }
         }
 
-        public Product ProductObj { get; set; }
+        public Product ProductObj { get; }
 
         /// <summary>
         /// Constructor for the Inventory
