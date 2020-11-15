@@ -24,7 +24,7 @@ CREATE TABLE Product (
 	Description TEXT NOT NULL,
 	Id INT IDENTITY(5001,1),
 	Price MONEY NOT NULL CHECK (Price >= 0.0),
-	OrderLimit INT NULL CHECK (OrderLimit > 0),
+	OrderLimit INT NOT NULL CHECK (OrderLimit > 0),
 	CONSTRAINT PK_ProductId PRIMARY KEY (Id)
 );
 
@@ -57,6 +57,7 @@ DROP TABLE IF EXISTS Sale;
 CREATE TABLE Sale (
 	OrderNumber INT NOT NULL,
 	ProductId INT NOT NULL,
+	ProductName NVARCHAR(150) NOT NULL,
 	PurchasePrice MONEY NOT NULL CHECK (PurchasePrice >= 0),
 	Quantity INT NOT NULL CHECK (Quantity > 0),
 	CONSTRAINT PK_Sale PRIMARY KEY (OrderNumber, ProductId),

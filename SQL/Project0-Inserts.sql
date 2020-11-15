@@ -16,11 +16,11 @@ INSERT INTO "Order" (CustomerId, LocationId, Date) VALUES (1, 10002, '01/11/2018
 
 SELECT * FROM "Order";
 
-INSERT INTO Sale (OrderNumber, ProductId, PurchasePrice, Quantity) VALUES 
-	(3, 5001, 299.98, 2),
-	(3, 5002, 149.90, 10),
-	(4, 5004, 49.99, 1),
-	(5, 5005, 15.98, 2)
+INSERT INTO Sale (OrderNumber, ProductId, ProductName, PurchasePrice, Quantity) VALUES 
+	(1, 5001, 'Calulator',299.98, 2),
+	(1, 5002, 'Towel',149.90, 10),
+	(2, 5004, 'Blender',49.99, 1),
+	(3, 5005, 'Mop',15.98, 2)
 
 SELECT * FROM Sale;
 
