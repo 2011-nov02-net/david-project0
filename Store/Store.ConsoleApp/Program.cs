@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Store.Library;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Store.DatabaseModels;
 
 namespace Store.ConsoleApp
 {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Store.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Store.Library
 {
@@ -10,16 +12,19 @@ namespace Store.Library
         private readonly ICollection<Order> _orders;
         private static int _orderIdCounter;
 
+        private readonly DbContextOptions<Project0Context> _dbContext;
+
         public OrderRepository(ICollection<Order> orders)
         {
             _orders = orders ?? throw new ArgumentNullException(nameof(orders));
             _orderIdCounter = orders.Count + 1;
         }
 
-        public OrderRepository()
+        public OrderRepository(DbContextOptions<Project0Context> contextOptions)
         {
             _orders = new List<Order>();
             _orderIdCounter = 1;
+            _dbContext = contextOptions;
         }
 
         public void AddOrder(int custId, int locId, List<Sale> sales, DateTime date)

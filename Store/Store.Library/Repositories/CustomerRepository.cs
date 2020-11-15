@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Store.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Store.Library
 {
@@ -9,6 +11,8 @@ namespace Store.Library
     {
         private readonly ICollection<Customer> _customer;
         private static int _idCounter;
+
+        private readonly DbContextOptions<Project0Context> _dbContext;
 
         /// <summary>
         /// Constructor that will take a preformed set of Customers and store it
@@ -24,60 +28,59 @@ namespace Store.Library
         /// <summary>
         /// Constructor that will make an empty list of location
         /// </summary>
-        public CustomerRepository()
+        public CustomerRepository(DbContextOptions<Project0Context> contextOptions)
         {
             _customer = new List<Customer>();
             _idCounter = 1;
+            _dbContext = contextOptions;
         }
 
         /// <summary>
         /// Add a location to the list of locations
         /// </summary>
         /// <param name="location">The location to be added</param>
-        public void AddCustomer(Customer customer)
+        public void AddCustomer(string firstName, string lastName)
         {
-            if (!(customer == null))
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            // create a new customer from the DatabaseModel
+            if (firstName.Length > 0 && lastName.Length > 0)
             {
-                if (_customer.Any(c => c.Id == customer?.Id))
+                DatabaseModels.Customer cust = new DatabaseModels.Customer()
                 {
-                    throw new InvalidOperationException($"Location with ID {customer.Id} already exits.");
-                }
-                _customer.Add(customer);
+                    FirstName = firstName,
+                    LastName = lastName
+                };
+
+                //add customer to context and save it to DB
+                context.Add(cust);
+                context.SaveChanges();
             }
+
         }
 
-        /// <summary>
-        /// Creates and returns the location object
-        /// </summary>
-        /// <remarks>
-        /// Make the Location with this method to ensure that the id gets set
-        /// sequentially
-        /// </remarks>
-        /// <param name="name">Name of the location</param>
-        /// <returns>The Location</returns>
-        public Customer CreateCustomer(string firstName, string lastName)
-        {
-            Customer customer;
-            try
-            {
-                customer = new Customer(firstName, lastName, _idCounter);
-            }
-            catch(ArgumentException)
-            {
-                return null;
-            }
-            _idCounter++;
-            return customer;
-        }
 
         /// <summary>
-        /// Get and return location with a given id
+        /// Get and return customer with a given id
         /// </summary>
-        /// <param name="id">Id of the location we want</param>
-        /// <returns>The Location</returns>
+        /// <param name="id">Id of the customer we want</param>
+        /// <returns>The customer</returns>
         public Customer GetCustomer(int id)
         {
-            return _customer.First(c => c.Id == id);
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            // find the customer in the db, using FirstOrDefault to get
+            // null value if id does not exist
+            var dbCustomer = context.Customers.FirstOrDefault(c => c.Id == id);
+
+            // check for null value
+            if (dbCustomer == null) return null;
+
+            //return the customer
+            return new Customer(dbCustomer.FirstName, dbCustomer.LastName, dbCustomer.Id);
+
         }
 
         /// <summary>
@@ -86,7 +89,14 @@ namespace Store.Library
         /// <returns>All Customers</returns>
         public ICollection<Customer> GetAllCustomers()
         {
-            return new List<Customer>(_customer);
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            // get all the customer from db
+            var dbCustomers = context.Customers.ToList();
+
+            // convert and return to our customer class
+            return dbCustomers.Select(c => new Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
 
         /// <summary>
@@ -96,12 +106,17 @@ namespace Store.Library
         /// <returns>True if customer exists, False otherwise</returns>
         public bool IsCustomer(int id)
         {
-            return _customer.Any(c => c.Id == id);
+            // set up context
+            using var context = new Project0Context(_dbContext);
+            return context.Customers.Any(c => c.Id == id);
         }
 
         public int NumberOfCustomers()
         {
-            return _customer.Count;
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            return context.Customers.ToList().Count();
         }
     }
 }

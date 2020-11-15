@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Store.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Store.Library
 {
@@ -9,6 +11,8 @@ namespace Store.Library
     {
         private readonly ICollection<Location> _location;
         private static int _idCounter;
+
+        private readonly DbContextOptions<Project0Context> _dbContext;
 
         /// <summary>
         /// Constructor that will take a preformed set of location and store it
@@ -24,10 +28,11 @@ namespace Store.Library
         /// <summary>
         /// Constructor that will make an empty list of location
         /// </summary>
-        public LocationRepository()
+        public LocationRepository(DbContextOptions<Project0Context> contextOptions)
         {
             _location = new List<Location>();
             _idCounter = 1;
+            _dbContext = contextOptions;
         }
 
         /// <summary>
