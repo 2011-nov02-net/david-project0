@@ -76,6 +76,11 @@ namespace Store.Library
             return Customers.NumberOfCustomers();
         }
 
+        public Customer GetCustomer(int id)
+        {
+            return Customers.GetCustomer(id);
+        }
+
         // ---------------------------------------------------------------------
         // All Location related Session Methods go here
 
@@ -158,6 +163,19 @@ namespace Store.Library
         public void CreateProduct(string name, string description, decimal price, int orderLimit)
         {
             Products.AddDbProduct(name, description, price, orderLimit);
+        }
+
+        // ---------------------------------------------------------------------
+        // All Order related Session Methods go here
+
+        public List<Order> GetAllOrders()
+        {
+            return Orders.GetAllOrders();
+        }
+
+        public Decimal GetOrderTotal(int orderId)
+        {
+            return Orders.GetOrderTotal(orderId);
         }
 
 

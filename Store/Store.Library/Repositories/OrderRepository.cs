@@ -37,7 +37,12 @@ namespace Store.Library
 
         public List<Order> GetAllOrders()
         {
-            return new List<Order>(_orders);
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            var dbOrders = context.Orders.ToList();
+
+            return dbOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber)).ToList();
         }
 
         public List<Order> GetAllOrdersByCustomer(int custId)
@@ -61,6 +66,23 @@ namespace Store.Library
         public bool IsPrevOrder(Order order)
         {
             return _orders.Any(o => o.OrderNumber == order.OrderNumber);
+        }
+
+        public decimal GetOrderTotal(int orderId)
+        {
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            var list = context.Sales.Where(s => s.OrderNumber == orderId).ToList();
+
+            decimal sum = 0;
+
+            foreach(var item in list)
+            {
+                sum += item.PurchasePrice;
+            }
+
+            return sum;
         }
     }
 }

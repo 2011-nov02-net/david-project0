@@ -39,6 +39,9 @@ namespace Store.ConsoleApp
             Console.WriteLine("(6) Select Location");
             Console.WriteLine("(7) View Inventory at Location");
             Console.WriteLine("(8) Modify Inventory at Location");
+            Console.WriteLine("(9) View All Orders");
+            Console.WriteLine("(10) View All Orders By Customer");
+            Console.WriteLine("(11) View All Orders At Location");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -80,6 +83,18 @@ namespace Store.ConsoleApp
                     break;
                 case "8":
                     ModifyCurrentLocationInventory();
+                    WaitOnKeyPress();
+                    break;
+                case "9":
+                    ViewAllOrders();
+                    WaitOnKeyPress();
+                    break;
+                case "10":
+                    ViewAllOrdersByCustomer();
+                    WaitOnKeyPress();
+                    break;
+                case "11":
+                    ViewAllOrdersByLocation();
                     WaitOnKeyPress();
                     break;
                 case "x":
@@ -492,6 +507,45 @@ namespace Store.ConsoleApp
             }    
         }
 
+        //--------------------------------------------------------------------
+        // Orders Console
+
+        public static void ViewAllOrders()
+        {
+
+            Console.Clear();
+            // get all orders from the db
+            var orders = ses.GetAllOrders();
+
+            //make sure there are orders
+            if(orders.Count > 0)
+            {
+                foreach (var item in orders)
+                {
+                    //print each one
+                    Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID | Total");
+                    var cust = ses.GetCustomer(item.CustomerId);
+                    var total = ses.GetOrderTotal(item.OrderNumber);
+                    Console.WriteLine($"{item.OrderNumber, 12} |    {item.Date} | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {total.ToString("F")}");
+                    Console.WriteLine("----------------------------------------------------------------------------------------");
+                }
+            }
+
+        }
+
+        public static void ViewAllOrdersByCustomer()
+        {
+
+        }
+
+        public static void ViewAllOrdersByLocation()
+        {
+
+        }
+
+
+        //--------------------------------------------------------------------
+        // Miscellaneous Console
         public static void WaitOnKeyPress()
         {
             //wait for key press

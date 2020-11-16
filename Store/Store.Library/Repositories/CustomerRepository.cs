@@ -61,27 +61,6 @@ namespace Store.Library
         }
 
 
-        /// <summary>
-        /// Get and return customer with a given id
-        /// </summary>
-        /// <param name="id">Id of the customer we want</param>
-        /// <returns>The customer</returns>
-        public Customer GetCustomer(int id)
-        {
-            // get the context of the db
-            using var context = new Project0Context(_dbContext);
-
-            // find the customer in the db, using FirstOrDefault to get
-            // null value if id does not exist
-            var dbCustomer = context.Customers.FirstOrDefault(c => c.Id == id);
-
-            // check for null value
-            if (dbCustomer == null) return null;
-
-            //return the customer
-            return new Customer(dbCustomer.FirstName, dbCustomer.LastName, dbCustomer.Id);
-
-        }
 
         /// <summary>
         /// Gets a new list of all customers
@@ -117,6 +96,16 @@ namespace Store.Library
             using var context = new Project0Context(_dbContext);
 
             return context.Customers.ToList().Count();
+        }
+
+        public Customer GetCustomer(int id)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            var dbCust = context.Customers.FirstOrDefault(c => c.Id == id);
+
+            return new Customer(dbCust.FirstName, dbCust.LastName, dbCust.Id) ?? null;
         }
     }
 }
