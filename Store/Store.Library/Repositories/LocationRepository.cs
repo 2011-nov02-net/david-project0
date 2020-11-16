@@ -177,6 +177,8 @@ namespace Store.Library
                 ProductId = product.Id
             };
 
+            context.Inventories.Add(inventory);
+
             // ensure that the save works successfully
             try
             {

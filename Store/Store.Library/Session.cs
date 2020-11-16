@@ -39,6 +39,7 @@ namespace Store.Library
 
             Locations = new LocationRepository(s_dbContextOptions);
             Customers = new CustomerRepository(s_dbContextOptions);
+            Products = new ProductRepository(s_dbContextOptions);
             Orders = new OrderRepository(s_dbContextOptions);
         }
 
@@ -146,7 +147,7 @@ namespace Store.Library
 
         public bool IsProduct(string name)
         {
-            return Products.IsProduct(name);
+             return Products.IsProduct(name);
         }
 
         public DatabaseModels.Product GetProduct(string name)

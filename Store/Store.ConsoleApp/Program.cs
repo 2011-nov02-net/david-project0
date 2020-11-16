@@ -255,28 +255,36 @@ namespace Store.ConsoleApp
 
         public static void ModifyCurrentLocationInventory()
         {
-            Console.Clear();
-            PrintLocationInventory();
-            // ask if user wants to add to previous inventory or create new item\
-            string input = null;
-            while (input != "a" && input != "c" && input != "r")
+            // check to see if we have a location selected
+            if (ses.CurrentLocation != null)
             {
-                Console.Write("(A)dd/(R)emove existing product or (C)reate new product: ");
-                input = Console.ReadLine().ToLower();
+                Console.Clear();
+                PrintLocationInventory();
+                // ask if user wants to add to previous inventory or create new item\
+                string input = null;
+                while (input != "a" && input != "c" && input != "r")
+                {
+                    Console.Write("(A)dd/(R)emove existing product or (C)reate new product: ");
+                    input = Console.ReadLine().ToLower();
 
-            }
+                }
 
-            if (input == "a")
-            {
-                AddExistingInventory();
-            }
-            else if (input == "c")
-            {
-                AddNewInventory();
+                if (input == "a")
+                {
+                    AddExistingInventory();
+                }
+                else if (input == "c")
+                {
+                    AddNewInventory();
+                }
+                else
+                {
+                    RemoveExisitingInventory();
+                }
             }
             else
             {
-                RemoveExisitingInventory();
+                Console.WriteLine("No Store Selected.");
             }
 
         }
@@ -337,7 +345,7 @@ namespace Store.ConsoleApp
         {
             Console.Clear();
             //get name of item to add
-            string name = null;
+            string name = "";
 
             while(name.Length == 0)
             {
@@ -380,7 +388,7 @@ namespace Store.ConsoleApp
                 // not already a product, gather information
 
                 // product description
-                string description = null;
+                string description = "";
                 while(description.Length <= 0)
                 {
                     Console.Write("Product Description: ");
