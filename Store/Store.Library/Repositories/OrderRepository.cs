@@ -47,20 +47,22 @@ namespace Store.Library
 
         public List<Order> GetAllOrdersByCustomer(int custId)
         {
-            List<Order> custOrders = _orders.Where(o => o.CustomerId == custId).ToList();
-            return custOrders;
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            //get all orders where the custid of the order is the same as the one we are looking for
+            var dbCustOrders = context.Orders.Where(o => o.CustomerId == custId).ToList();
+            return dbCustOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber)).ToList();
         }
 
         public List<Order> GetAllOrdersByLocation(int locId)
         {
-            List<Order> locOrders = _orders.Where(o => o.LocationId == locId).ToList();
-            return locOrders;
-        }
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
 
-        public List<Order> GetAllOrdersByCustomerAndLocation(int custId, int locId)
-        {
-            List<Order> custAndLocOrders = _orders.Where(o => o.CustomerId == custId && o.LocationId == locId).ToList();
-            return custAndLocOrders;
+            //get all orders where the locationid of the order is the same as the one we are looking for
+            var dbLocationOrders = context.Orders.Where(o => o.LocationId == locId).ToList();
+            return dbLocationOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber)).ToList();
         }
 
         public bool IsPrevOrder(Order order)

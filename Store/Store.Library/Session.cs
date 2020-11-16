@@ -173,6 +173,16 @@ namespace Store.Library
             return Orders.GetAllOrders();
         }
 
+        public List<Order> GetAllOrdersByCustomer()
+        {
+            return Orders.GetAllOrdersByCustomer(CurrentCustomer.Id);
+        }
+
+        public List<Order> GetAllOrdersByLocation()
+        {
+            return Orders.GetAllOrdersByLocation(CurrentLocation.Id);
+        }
+
         public Decimal GetOrderTotal(int orderId)
         {
             return Orders.GetOrderTotal(orderId);

@@ -523,11 +523,11 @@ namespace Store.ConsoleApp
                 foreach (var item in orders)
                 {
                     //print each one
-                    Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID | Total");
+                    Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID |      Total");
                     var cust = ses.GetCustomer(item.CustomerId);
                     var total = ses.GetOrderTotal(item.OrderNumber);
-                    Console.WriteLine($"{item.OrderNumber, 12} |    {item.Date} | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {total.ToString("F")}");
-                    Console.WriteLine("----------------------------------------------------------------------------------------");
+                    Console.WriteLine($"{item.OrderNumber, 12} |    {item.Date} | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {total.ToString("F"), 10}");
+                    Console.WriteLine("-----------------------------------------------------------------------------------------------------");
                 }
             }
 
@@ -535,12 +535,56 @@ namespace Store.ConsoleApp
 
         public static void ViewAllOrdersByCustomer()
         {
+            Console.Clear();
+            if (ses.CurrentCustomer != null)
+            {
+                var orders = ses.GetAllOrdersByCustomer();
 
+                //make sure there are orders
+                if (orders.Count > 0)
+                {
+                    Console.WriteLine($"Showing Orders for: " + ses.ShowCurrentCustomer());
+                    foreach (var item in orders)
+                    {
+                        //print each one
+                        Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Location ID |      Total");
+                        var total = ses.GetOrderTotal(item.OrderNumber);
+                        Console.WriteLine($"{item.OrderNumber,12} |    {item.Date} | {item.CustomerId,11} | {item.LocationId,11} | {total.ToString("F"),10}");
+                        Console.WriteLine("--------------------------------------------------------------------------------");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("No Customer Selected to show Orders.");
+            }
         }
 
         public static void ViewAllOrdersByLocation()
         {
+            Console.Clear();
+            if(ses.CurrentLocation != null)
+            {
+                var orders = ses.GetAllOrdersByLocation();
 
+                //make sure there are orders
+                if (orders.Count > 0)
+                {
+                    foreach (var item in orders)
+                    {
+                        //print each one
+                        Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID |      Total");
+                        var cust = ses.GetCustomer(item.CustomerId);
+                        var total = ses.GetOrderTotal(item.OrderNumber);
+                        Console.WriteLine($"{item.OrderNumber,12} |    {item.Date} | {item.CustomerId,11} | {cust?.LastName,19}| {item.LocationId,11} | {total.ToString("F"), 10}");
+                        Console.WriteLine("-----------------------------------------------------------------------------------------------------");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("No Orders to show from current Location.");
+            }
         }
 
 
