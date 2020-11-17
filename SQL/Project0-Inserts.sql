@@ -12,15 +12,15 @@ INSERT INTO Product (Name, Description, Price, OrderLimit) VALUES
 
 SELECT * FROM PRODUCT;
 
-INSERT INTO "Order" (CustomerId, LocationId, Date) VALUES (1, 10002, '01/11/2018'), (3, 10003, '02/14/2018'), (3, 10001, '02/15/2018');
+INSERT INTO "Order" (CustomerId, LocationId, Date, OrderTotal) VALUES (1, 10002, '01/11/2018', 449.88), (3, 10003, '02/14/2018', 49.99), (3, 10001, '02/15/2018', 15.98);
 
 SELECT * FROM "Order";
 
 INSERT INTO Sale (OrderNumber, ProductId, ProductName, PurchasePrice, Quantity) VALUES 
-	(1, 5001, 'Calulator',299.98, 2),
-	(1, 5002, 'Towel',149.90, 10),
+	(1, 5001, 'Calulator',149.99, 2),
+	(1, 5002, 'Towel',14.99, 10),
 	(2, 5004, 'Blender',49.99, 1),
-	(3, 5005, 'Mop',15.98, 2)
+	(3, 5005, 'Mop',7.99, 2)
 
 SELECT * FROM Sale;
 

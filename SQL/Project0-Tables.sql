@@ -35,6 +35,7 @@ CREATE TABLE "Order" (
 	LocationId INT NOT NULL,
 	Date DATE NOT NULL,
 	OrderNumber INT IDENTITY,
+	OrderTotal MONEY NOT NULL CHECK (OrderTotal > 0),
 	CONSTRAINT PK_OrderNumber PRIMARY KEY (OrderNumber),
 	CONSTRAINT FK_OrderCustomerId_CustomerId FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
 	CONSTRAINT FK_OrderLocationId_LocationId FOREIGN KEY (LocationId) REFERENCES Location(Id)
