@@ -48,6 +48,15 @@ namespace Store.Library
             this.OrderTotal = orderTotal;
         }
 
+        public Order(int custId, int locId, DateTime date, int orderNumber, decimal orderTotal)
+        {
+            this.CustomerId = custId;
+            this.LocationId = locId;
+            this.Date = date;
+            this.OrderNumber = orderNumber;
+            this.OrderTotal = orderTotal;
+        }
+
         public Order(int custId, int locId, DateTime date, int orderNumber)
         {
             this.CustomerId = custId;

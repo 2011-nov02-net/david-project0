@@ -83,7 +83,7 @@ namespace Store.Library
 
             var dbOrders = context.Orders.ToList();
 
-            return dbOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber)).ToList();
+            return dbOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber, o.OrderTotal)).ToList();
         }
 
         public List<Order> GetAllOrdersByCustomer(int custId)

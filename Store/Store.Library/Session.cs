@@ -15,12 +15,12 @@ namespace Store.Library
     {
         //session variables
         public LocationRepository Locations { get; set; }
-
         public CustomerRepository Customers;
         public OrderRepository Orders { get; set; }
         public ProductRepository Products { get; set; }
         public Customer CurrentCustomer { get; set; } = null;
         public Location CurrentLocation { get; set; } = null;
+        public List<Sale> SalesList { get; set; } = new List<Sale>();
 
         static DbContextOptions<Project0Context> s_dbContextOptions;
 
@@ -46,94 +46,42 @@ namespace Store.Library
         // ---------------------------------------------------------------------
         // All Customer related Session Methods go here
 
-        public void AddCustomer(string firstName, string lastName)
-        {
-            Customers.AddCustomer(firstName, lastName);
-        }
+        public void AddCustomer(string firstName, string lastName) => Customers.AddCustomer(firstName, lastName);
 
-        public List<Customer> GetAllCustomers()
-        {
-            return new List<Customer>(Customers.GetAllCustomers());
-        }
+        public List<Customer> GetAllCustomers() => new List<Customer>(Customers.GetAllCustomers());
 
-        public void SetCurrentCustomer(int id)
-        {
-            CurrentCustomer = Customers.GetCustomer(id);
-        }
+        public void SetCurrentCustomer(int id) => CurrentCustomer = Customers.GetCustomer(id);
 
-        public string ShowCurrentCustomer()
-        {
-            return CurrentCustomer?.ToString() ?? "No Customer Currently Selected";
-        }
+        public string ShowCurrentCustomer() => CurrentCustomer?.ToString() ?? "No Customer Currently Selected";
 
-        public bool IsCustomer(int id)
-        {
-            return Customers.IsCustomer(id);
-        }
+        public bool IsCustomer(int id) => Customers.IsCustomer(id);
 
-        public int NumOfCurrentCustomers()
-        {
-            return Customers.NumberOfCustomers();
-        }
+        public int NumOfCurrentCustomers() => Customers.NumberOfCustomers();
 
-        public Customer GetCustomer(int id)
-        {
-            return Customers.GetCustomer(id);
-        }
+        public Customer GetCustomer(int id) => Customers.GetCustomer(id);
 
         // ---------------------------------------------------------------------
         // All Location related Session Methods go here
 
-        public void AddLocation(string name)
-        {
-            Locations.AddLocation(name);
-        }
+        public void AddLocation(string name) => Locations.AddLocation(name);
 
-        public List<Location> GetAllLocations()
-        {
-            return new List<Location>(Locations.GetAllLocations());
-        }
+        public List<Location> GetAllLocations() => new List<Location>(Locations.GetAllLocations());
 
-        public void SetCurrentLocation(int id)
-        {
-            CurrentLocation = Locations.GetLocation(id);
-        }
+        public void SetCurrentLocation(int id) => CurrentLocation = Locations.GetLocation(id);
 
-        public string ShowCurrentLocation()
-        {
-            return CurrentLocation?.ToString() ?? "No Location Currently Selected";
-        }
+        public string ShowCurrentLocation() => CurrentLocation?.ToString() ?? "No Location Currently Selected";
 
-        public int NumOfCurrentLocations()
-        {
-            return Locations.NumberOfLocations();
-        }
+        public int NumOfCurrentLocations() => Locations.NumberOfLocations();
 
-        public bool IsLocation(int id)
-        {
-            return Locations.IsLocation(id);
-        }
+        public bool IsLocation(int id) => Locations.IsLocation(id);
 
-        public ICollection<Inventory> GetLocationInventory()
-        {
-            return Locations.GetLocationInventory(CurrentLocation);
+        public ICollection<Inventory> GetLocationInventory() => Locations.GetLocationInventory(CurrentLocation);
 
-        }
+        public bool IsInLocationInventory(int id) => Locations.IsInLocationInventory(CurrentLocation, id);
 
-        public bool IsInLocationInventory(int id)
-        {
-            return Locations.IsInLocationInventory(CurrentLocation, id);
-        }
+        public bool AddLocationInventory(int productId, int quantity) => Locations.AddLocationInventory(CurrentLocation, productId, quantity);
 
-        public bool AddLocationInventory(int productId, int quantity)
-        {
-            return Locations.AddLocationInventory(CurrentLocation, productId, quantity);
-        }
-
-        public bool AddLocationInventory(DatabaseModels.Product product, int quantity)
-        {
-            return Locations.AddLocationInventory(CurrentLocation, product, quantity);
-        }
+        public bool AddLocationInventory(DatabaseModels.Product product, int quantity) => Locations.AddLocationInventory(CurrentLocation, product, quantity);
 
         public bool AddLocationNewInventory(string name, string description, decimal price, int orderLimit, int quantity)
         {
@@ -142,78 +90,47 @@ namespace Store.Library
             return Locations.AddLocationInventory(CurrentLocation, product, quantity);
         }
 
-        public bool RemoveLocationInventory(int productId)
-        {
-            return Locations.RemoveLocationInventory(CurrentLocation, productId);
-        }
+        public bool RemoveLocationInventory(int productId) => Locations.RemoveLocationInventory(CurrentLocation, productId);
 
-        public bool IsEnoughInventory(int productId, int quantity)
-        {
-            return Locations.IsEnoughInventory(CurrentLocation,productId, quantity);
-        }
+        public bool IsEnoughInventory(int productId, int quantity) => Locations.IsEnoughInventory(CurrentLocation, productId, quantity);
 
         // ---------------------------------------------------------------------
         // All Product related Session Methods go here
 
-        public bool IsProduct(string name)
-        {
-             return Products.IsProduct(name);
-        }
+        public bool IsProduct(string name) => Products.IsProduct(name);
 
-        public DatabaseModels.Product GetProduct(string name)
-        {
-            return Products.GetProduct(name);
-        }
+        public DatabaseModels.Product GetProduct(string name) => Products.GetProduct(name);
 
-        public Product GetProduct(int id)
-        {
-            return Products.GetProduct(id);
-        }
+        public Product GetProduct(int id) => Products.GetProduct(id);
 
-        public void CreateProduct(string name, string description, decimal price, int orderLimit)
-        {
-            Products.AddDbProduct(name, description, price, orderLimit);
-        }
+        public void CreateProduct(string name, string description, decimal price, int orderLimit) => Products.AddDbProduct(name, description, price, orderLimit);
 
-        public bool IsWithinOrderLimit(int productId, int quantity)
-        {
-            return Products.IsWithinOrderLimit(productId, quantity);
-        }
+        public bool IsWithinOrderLimit(int productId, int quantity) => Products.IsWithinOrderLimit(productId, quantity);
 
         // ---------------------------------------------------------------------
         // All Order related Session Methods go here
 
-        public List<Order> GetAllOrders()
+        public List<Order> AllOrders => Orders.GetAllOrders();
+
+        public List<Order> AllOrdersByCustomer => Orders.GetAllOrdersByCustomer(CurrentCustomer.Id);
+
+        public List<Order> AllOrdersByLocation => Orders.GetAllOrdersByLocation(CurrentLocation.Id);
+
+        public decimal GetOrderTotal(int orderId) => Orders.GetOrderTotal(orderId);
+
+        public void AddOrder()
         {
-            return Orders.GetAllOrders();
+            Orders.AddOrder(CurrentCustomer, CurrentLocation, SalesList);
+            // clear out the sales list
+            SalesList = new List<Sale>();
         }
 
-        public List<Order> GetAllOrdersByCustomer()
-        {
-            return Orders.GetAllOrdersByCustomer(CurrentCustomer.Id);
-        }
+        public Order GetOrder(int orderId) => Orders.GetOrder(orderId);
 
-        public List<Order> GetAllOrdersByLocation()
-        {
-            return Orders.GetAllOrdersByLocation(CurrentLocation.Id);
-        }
-
-        public Decimal GetOrderTotal(int orderId)
-        {
-            return Orders.GetOrderTotal(orderId);
-        }
-
-        public void AddOrder(ICollection<Library.Sale> sales)
-        {
-            Orders.AddOrder(CurrentCustomer, CurrentLocation, sales);
-        }
-
-        public Order GetOrder(int orderId)
-        {
-            return Orders.GetOrder(orderId);
-        }
+        public void AddSaleToOrder(Sale sale) => SalesList.Add(sale);
 
 
+        public List<Sale> GetCurrentOrderSales() => new List<Sale>(SalesList);
 
         // ---------------------------------------------------------------------
         // All Closing related Session Methods go here
