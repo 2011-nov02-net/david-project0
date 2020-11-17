@@ -43,6 +43,7 @@ namespace Store.ConsoleApp
             Console.WriteLine("(10) View All Orders By Customer");
             Console.WriteLine("(11) View All Orders At Location");
             Console.WriteLine("(12) Make New Order");
+            Console.WriteLine("(13) View an Order's Details");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -100,6 +101,10 @@ namespace Store.ConsoleApp
                     break;
                 case "12":
                     MakeOrder();
+                    WaitOnKeyPress();
+                    break;
+                case "13":
+                    ViewOrderDetails();
                     WaitOnKeyPress();
                     break;
                 case "x":
@@ -531,7 +536,7 @@ namespace Store.ConsoleApp
                     Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID |      Total");
                     var cust = ses.GetCustomer(item.CustomerId);
                     var total = ses.GetOrderTotal(item.OrderNumber);
-                    Console.WriteLine($"{item.OrderNumber, 12} |    {item.Date} | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {total.ToString("F"), 10}");
+                    Console.WriteLine($"{item.OrderNumber, 12} |{item.Date, 25 } | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {total.ToString("F"), 10}");
                     Console.WriteLine("-----------------------------------------------------------------------------------------------------");
                 }
             }
@@ -589,6 +594,60 @@ namespace Store.ConsoleApp
             else
             {
                 Console.WriteLine("No Orders to show from current Location.");
+            }
+        }
+
+        /// <summary>
+        /// Displays all the information about a particular order
+        /// </summary>
+        /// <remarks>
+        /// Will operate on the entire list of orders, not particular customers or locations
+        /// at this time. For future development.
+        /// </remarks>
+        public static void ViewOrderDetails()
+        {
+
+            int orderId = 0;
+            while(orderId == 0)
+            {
+                Console.Clear();
+                ViewAllOrders();
+                Console.Write("Select order id of order you wish to view: ");
+                string input = Console.ReadLine();
+                try
+                {
+                    orderId = Int32.Parse(input);
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Please enter a valid number");
+                    continue;
+                }
+
+                // get the order
+                var order = ses.GetOrder(orderId);
+
+                if(order != null)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID |      Total");
+                    var cust = ses.GetCustomer(order.CustomerId);
+                    Console.WriteLine($"{order.OrderNumber,12} |{order.Date,25 } | {order.CustomerId,11} | {cust?.LastName,19}| {order.LocationId,11} | {order.OrderTotal,10}");
+                    Console.WriteLine("-----------------------------------------------------------------------------------------------------");
+                    Console.WriteLine("Product ID | Product Name\t | Purchased Price | Quantity Ordered");
+
+                    foreach (var item in order.SalesList)
+                    {
+                        // print each item in the sale
+                        Console.WriteLine($"{item.ProductId}|{item.ProductName}|{item.PurchasePrice}|{item.SaleQuantity}");
+                        Console.WriteLine("------------------------------------------------------------------");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Order Number");
+                    orderId = 0;
+                }
             }
         }
 

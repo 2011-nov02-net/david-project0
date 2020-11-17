@@ -12,6 +12,7 @@ namespace Store.Library
         public int LocationId { get; set; }
         public ICollection<Sale> SalesList { get; set; }
         public DateTime Date { get; set; }
+        public decimal OrderTotal { get; }
         public int OrderNumber
         {
             get { return _orderNumber; }
@@ -36,6 +37,15 @@ namespace Store.Library
             this.SalesList = sales;
             this.Date = date;
             this.OrderNumber = orderNumber;
+        }
+        public Order(int custId, int locId, List<Sale> sales, DateTime date, int orderNumber, decimal orderTotal)
+        {
+            this.CustomerId = custId;
+            this.LocationId = locId;
+            this.SalesList = sales;
+            this.Date = date;
+            this.OrderNumber = orderNumber;
+            this.OrderTotal = orderTotal;
         }
 
         public Order(int custId, int locId, DateTime date, int orderNumber)

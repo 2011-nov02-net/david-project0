@@ -35,6 +35,7 @@ namespace Store.Library
             // create list converting from Library.Sale to DatabaseModel.Sale
 
             var dbSales = new List<DatabaseModels.Sale>();
+            decimal orderTotal = 0.0m;
 
             foreach(var item in sales)
             {
@@ -47,7 +48,12 @@ namespace Store.Library
                     PurchasePrice = dbProduct.Price,
                     Quantity = item.SaleQuantity,
                 };
+                // add to the sum of the order total
+                orderTotal += item.SaleQuantity * dbProduct.Price;
+
+                // add the sale to the running list
                 dbSales.Add(dbSale);
+
                 // remove the amount from the inventory of the store
                 var locationInventory = context.Inventories.First(i => i.LocationId == location.Id && i.ProductId == item.ProductId);
                 locationInventory.Quantity -= item.SaleQuantity;
@@ -64,6 +70,8 @@ namespace Store.Library
                 Sales = dbSales
             };
 
+            // calculate total
+            order.OrderTotal = orderTotal;
             context.Orders.Add(order);
             context.SaveChanges();
         }
@@ -98,10 +106,6 @@ namespace Store.Library
             return dbLocationOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber)).ToList();
         }
 
-        public bool IsPrevOrder(Order order)
-        {
-            return _orders.Any(o => o.OrderNumber == order.OrderNumber);
-        }
 
         public decimal GetOrderTotal(int orderId)
         {
@@ -118,6 +122,28 @@ namespace Store.Library
             }
 
             return sum;
+        }
+
+        public Order GetOrder(int orderId)
+        {
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            // get the order and convert it
+            var dbOrder = context.Orders.FirstOrDefault(o => o.OrderNumber == orderId);
+
+            // get all the sales related to the order
+            var dbSales = context.Sales.Where(s => s.OrderNumber == orderId).ToList();
+
+            // convert all sales
+            var sales = new List<Sale>();
+
+            foreach(var item in dbSales)
+            {
+                sales.Add(new Sale(item.ProductId, item.ProductName, item.PurchasePrice, item.Quantity));
+            }
+
+            return new Order(dbOrder.CustomerId, dbOrder.LocationId, sales, dbOrder.Date, dbOrder.OrderNumber, dbOrder.OrderTotal);
         }
     }
 }

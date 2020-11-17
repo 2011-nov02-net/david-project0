@@ -208,6 +208,11 @@ namespace Store.Library
             Orders.AddOrder(CurrentCustomer, CurrentLocation, sales);
         }
 
+        public Order GetOrder(int orderId)
+        {
+            return Orders.GetOrder(orderId);
+        }
+
 
 
         // ---------------------------------------------------------------------

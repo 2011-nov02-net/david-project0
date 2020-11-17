@@ -8,6 +8,8 @@ namespace Store.Library
     {
         private int _saleQuantity;
         public int ProductId { get; set; }
+        public string ProductName { get; }
+        public decimal PurchasePrice { get; }
         public Product ProductObj { get; set; }
         public int SaleQuantity
         {
@@ -30,6 +32,14 @@ namespace Store.Library
         public Sale(int productId, int quantity)
         {
             this.ProductId = productId;
+            this.SaleQuantity = quantity;
+        }
+
+        public Sale(int id, string name, decimal price, int quantity)
+        {
+            this.ProductId = id;
+            this.ProductName = name;
+            this.PurchasePrice = price;
             this.SaleQuantity = quantity;
         }
     }
