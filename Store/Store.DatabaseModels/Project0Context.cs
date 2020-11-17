@@ -83,6 +83,8 @@ namespace Store.DatabaseModels
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
+                entity.Property(e => e.OrderTotal).HasColumnType("money");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId)

@@ -16,6 +16,7 @@ namespace Store.DatabaseModels
         public int LocationId { get; set; }
         public DateTime Date { get; set; }
         public int OrderNumber { get; set; }
+        public decimal OrderTotal { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Location Location { get; set; }
