@@ -114,7 +114,7 @@ namespace Store.Library
 
             foreach(var item in list)
             {
-                sum += item.PurchasePrice;
+                sum += item.PurchasePrice * item.Quantity;
             }
 
             return sum;
