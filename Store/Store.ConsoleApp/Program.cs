@@ -13,6 +13,9 @@ namespace Store.ConsoleApp
         // start a session
         public static Session ses = new Session();
 
+        /// <summary>
+        /// Main method, Will continously print menu, prompt user, and pass to menu selection.
+        /// </summary>
         static void Main(string[] args)
         {
             bool cont = true;
@@ -20,11 +23,14 @@ namespace Store.ConsoleApp
             while (cont)
             {
                 PrintMainMenu();
-                string input = GetUserInput();
+                string input = Console.ReadLine();
                 MainMenuSelection(input, ref cont);
             }
         }
 
+        /// <summary>
+        /// Prints the main menu
+        /// </summary>
         public static void PrintMainMenu()
         {
             Console.Clear();
@@ -49,11 +55,11 @@ namespace Store.ConsoleApp
             Console.Write("Selection: ");
         }
 
-        public static string GetUserInput()
-        {
-            return Console.ReadLine();
-        }
-
+        /// <summary>
+        /// Handles the user input and determines which logic should be done
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="cont"></param>
         public static void MainMenuSelection(string input, ref bool cont)
         {
             switch(input.ToLower())
@@ -110,7 +116,6 @@ namespace Store.ConsoleApp
                     break;
                 case "x":
                     cont = false;
-                    ses.CloseSession();
                     break;
             }
         }
@@ -118,6 +123,9 @@ namespace Store.ConsoleApp
         //--------------------------------------------------------------------
         // Customer Console
 
+        /// <summary>
+        /// Adds a customer to the session
+        /// </summary>
         public static void AddCustomerConsole()
         {
             Console.Clear();
@@ -128,6 +136,9 @@ namespace Store.ConsoleApp
             ses.AddCustomer(firstName, lastName);
         }
 
+        /// <summary>
+        /// Prints list of all customers
+        /// </summary>
         public static void PrintAllCustomersConsole()
         {
             Console.Clear();
@@ -148,6 +159,13 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Prints list of all customers and allows user to select one
+        /// </summary>
+        /// <remarks>
+        /// The Customer selected gets passed to the session where the data is stored
+        /// Nothing is stored in the app
+        /// </remarks>
         public static void GetAndSetCustomerSelection()
         {
             if (!(ses.NumOfCurrentCustomers() == 0))
@@ -186,6 +204,9 @@ namespace Store.ConsoleApp
         //--------------------------------------------------------------------
         // Location Console
 
+        /// <summary>
+        /// Add a new location to the session
+        /// </summary>
         public static void AddLocationConsole()
         {
             Console.Clear();
@@ -194,6 +215,9 @@ namespace Store.ConsoleApp
             ses.AddLocation(name);
         }
 
+        /// <summary>
+        /// Prints list of all locaions 
+        /// </summary>
         public static void PrintAllLocationsConsole()
         {
             if (!(ses.NumOfCurrentLocations() == 0))
@@ -215,6 +239,13 @@ namespace Store.ConsoleApp
             }    
         }
 
+        /// <summary>
+        /// Prints location and sets location in Session
+        /// </summary>
+        /// <remarks>
+        /// The Location selected gets passed to the session where the data is stored
+        /// Nothing is stored in the app
+        /// </remarks>
         public static void GetAndSetLocationSelection()
         {
             if (ses.NumOfCurrentLocations() > 0)
@@ -250,6 +281,12 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Prints inventory from the current location stored in the session
+        /// </summary>
+        /// <remarks>
+        /// Will get a list of the current inventory from the location stored in the session
+        /// </remarks>
         public static void PrintLocationInventory()
         {
             Console.Clear();
@@ -261,11 +298,12 @@ namespace Store.ConsoleApp
                 // make sure that the store has inventory
                 if (inventory.Count > 0)
                 {
+                    Console.WriteLine("Product Id | Product Name | Product Description \t\t\t |   Price | Order Limit | Quantity In Stock");
                     foreach (var item in inventory)
                     {
                         var product = item.ProductObj;
-                        Console.WriteLine($"{product.Id}: {product.Name} | {product.Description} | {product.Price}");
-                        Console.WriteLine($"Quantity: {item.Quantity}");
+                        Console.WriteLine($"{product.Id, 10} |{product.Name, 13} | {product.Description, 44} | {product.Price.ToString("F"), 7} | {product.OrderLimit,11} | {item.Quantity, 10}");
+                        Console.WriteLine("--------------------------------------------------------------------------------------------------------------------");
                     }
                 }
                 else
@@ -279,6 +317,13 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Gets from the user inventory to add to the session 
+        /// </summary>
+        /// <remarks>
+        /// There is some logic here to handle input from the user regarding if it is an
+        /// item that shows up on the inventory screen or is a new product to add to inventory
+        /// </remarks>
         public static void ModifyCurrentLocationInventory()
         {
             // check to see if we have a location selected
@@ -315,6 +360,9 @@ namespace Store.ConsoleApp
 
         }
 
+        /// <summary>
+        /// Add a quantity to existing product in inventory
+        /// </summary>
         public static void AddExistingInventory()
         {
             //since we have already displayed all the inventory at the location we can just get the selection here
@@ -367,6 +415,13 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Adds a new product and inventory
+        /// </summary>
+        /// <remarks>
+        /// Will search products to find a match before adding it to inventory
+        /// If it finds a match will use that product instead of creating a new product
+        /// </remarks>
         public static void AddNewInventory()
         {
             Console.Clear();
@@ -482,6 +537,12 @@ namespace Store.ConsoleApp
 
         }
 
+        /// <summary>
+        /// Removes a whole item from inventory
+        /// </summary>
+        /// <remarks>
+        /// Will remove and then will not show that item again in the inventory list until it is added back in
+        /// </remarks>
         public static void RemoveExisitingInventory()
         {
             int productInput = -1;
@@ -521,6 +582,9 @@ namespace Store.ConsoleApp
         //--------------------------------------------------------------------
         // Orders Console
 
+        /// <summary>
+        /// View all orders, will sort order before showing
+        /// </summary>
         public static void ViewAllOrders()
         {
             Console.Clear();
@@ -546,6 +610,13 @@ namespace Store.ConsoleApp
 
         }
 
+        /// <summary>
+        /// Will show any orders by the current customer stored in the session
+        /// </summary>
+        /// <remarks>
+        /// There has to be a customer selected before it will show any orders.
+        /// i.e. will not ask for customer if there isn't one selected
+        /// </remarks>
         public static void ViewAllOrdersByCustomer()
         {
             Console.Clear();
@@ -573,6 +644,13 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Will show any orders at the current location stored in the session
+        /// </summary>
+        /// <remarks>
+        /// There has to be a location selected before it will show any orders.
+        /// i.e. will not ask for location if there isn't one selected
+        /// </remarks>
         public static void ViewAllOrdersByLocation()
         {
             Console.Clear();
@@ -589,7 +667,7 @@ namespace Store.ConsoleApp
                         Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID |      Total");
                         var cust = ses.GetCustomer(item.CustomerId);
                         var total = ses.GetOrderTotal(item.OrderNumber);
-                        Console.WriteLine($"{item.OrderNumber,12} |    {item.Date} | {item.CustomerId,11} | {cust?.LastName,19}| {item.LocationId,11} | {total.ToString("F"), 10}");
+                        Console.WriteLine($"{item.OrderNumber,12} |{item.Date, 25} | {item.CustomerId,11} | {cust?.LastName,19}| {item.LocationId,11} | {total.ToString("F"), 10}");
                         Console.WriteLine("-----------------------------------------------------------------------------------------------------");
                     }
                 }
@@ -642,8 +720,8 @@ namespace Store.ConsoleApp
                     foreach (var item in order.SalesList)
                     {
                         // print each item in the sale
-                        Console.WriteLine($"{item.ProductId}|{item.ProductName}|{item.PurchasePrice}|{item.SaleQuantity}");
-                        Console.WriteLine("------------------------------------------------------------------");
+                        Console.WriteLine($"{item.ProductId, 11}|{item.ProductName, 21}|{item.PurchasePrice, 17}|{item.SaleQuantity, 9}");
+                        Console.WriteLine("---------------------------------------------------------------------");
                     }
                 }
                 else
@@ -654,6 +732,13 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// creates the list of products for an order to have
+        /// </summary>
+        /// <remarks>
+        /// The list of current products in the order is actually stored in the session.
+        /// This is just an input/ouput to show and get from the user
+        /// </remarks>
         public static void MakeOrder()
         {
             Console.Clear();
@@ -667,11 +752,13 @@ namespace Store.ConsoleApp
                     // Display products from the store selected
                     PrintLocationInventory();
                     PrintCurrentOrder(ses.GetCurrentOrderSales());
+                    //ask the user for a product Id or if they are done
                     Console.Write("Type Product Id or (D)one:");
                     input = Console.ReadLine();
                     if (input.ToLower() == "d")
                         continue;
 
+                    // parse the product number
                     int productId;
                     try
                     {
@@ -687,6 +774,7 @@ namespace Store.ConsoleApp
                     // make sure the product id selected is in current list
                     if (ses.IsInLocationInventory(productId))
                     {
+                        // get quantity from the user
                         Console.Write("Please enter quanity: ");
                         int quantity;
                         try
@@ -708,20 +796,23 @@ namespace Store.ConsoleApp
                         }
                         else
                         {
+                            // error checking
                             if(quantity <= 0)
                             {
                                 Console.WriteLine("Please Enter Value above 0.");
                             }
                             else
                             {
-                                // reach here when the quantity requested is higher than the order limit
-                                Console.WriteLine("Please enter a Value below the order Limit.");
+                                // reach here when the quantity requested is higher than the order limit or doesn't have enough inventory
+                                Console.WriteLine("Please enter a valid number.");
                             }
                             WaitOnKeyPress();
                         }
 
                     }
                 }
+                // when done, check to see if there was anything added to the order
+                // Don't want empty orders to be added to the db
                 if(ses.GetCurrentOrderSales().Count != 0)
                 {
                     ses.AddOrder();
@@ -737,15 +828,25 @@ namespace Store.ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Prints the order currently being built
+        /// </summary>
+        /// <param name="sales"></param>
+        /// <remarks>
+        /// The session keeps track of the order, this asks the session for
+        /// the list and will print it out
+        /// </remarks>
         public static void PrintCurrentOrder(ICollection<Library.Sale> sales)
         {
             // Print the products in the current order
-            Console.WriteLine("\tProduct | Quantity");
+            Console.WriteLine("Current Order:");
+            Console.WriteLine("--------------");
+            Console.WriteLine("\tProduct ID | Quantity");
             if(sales.Count != 0)
             {
                 foreach(var item in sales)
                 {
-                    Console.WriteLine($"{item.ProductId,11} | {item.SaleQuantity}");
+                    Console.WriteLine($"{item.ProductId,18} | {item.SaleQuantity,7}");
                 }
             }
         }
@@ -753,6 +854,10 @@ namespace Store.ConsoleApp
 
         //--------------------------------------------------------------------
         // Miscellaneous Console
+
+        /// <summary>
+        /// Waits for key press
+        /// </summary>
         public static void WaitOnKeyPress()
         {
             //wait for key press
@@ -760,6 +865,10 @@ namespace Store.ConsoleApp
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Asks the user for which sort they would like to use
+        /// </summary>
+        /// <returns>The Sorter</returns>
         public static ISorter GetSorter()
         {
             ISorter sorter = new NonSorter();
