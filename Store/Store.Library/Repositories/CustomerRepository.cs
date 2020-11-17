@@ -9,29 +9,15 @@ namespace Store.Library
 {
     public class CustomerRepository
     {
-        private readonly ICollection<Customer> _customer;
-        private static int _idCounter;
 
         private readonly DbContextOptions<Project0Context> _dbContext;
 
         /// <summary>
-        /// Constructor that will take a preformed set of Customers and store it
+        /// Constructor that will set up the context of the db
         /// </summary>
-        /// <param name="location"> the Collection of Customers</param>
-        public CustomerRepository(ICollection<Customer> customers)
-        {
-            _customer = customers ?? throw new ArgumentNullException(nameof(customers));
-            //set the id counter
-            _idCounter = customers.Count + 1;
-        }
-
-        /// <summary>
-        /// Constructor that will make an empty list of location
-        /// </summary>
+        /// <param name="contextOptions">The Database Connection</param>
         public CustomerRepository(DbContextOptions<Project0Context> contextOptions)
         {
-            _customer = new List<Customer>();
-            _idCounter = 1;
             _dbContext = contextOptions;
         }
 
@@ -43,7 +29,6 @@ namespace Store.Library
         {
             // get the context of the db
             using var context = new Project0Context(_dbContext);
-
             // create a new customer from the DatabaseModel
             if (firstName.Length > 0 && lastName.Length > 0)
             {
@@ -52,15 +37,11 @@ namespace Store.Library
                     FirstName = firstName,
                     LastName = lastName
                 };
-
                 //add customer to context and save it to DB
                 context.Add(cust);
                 context.SaveChanges();
             }
-
         }
-
-
 
         /// <summary>
         /// Gets a new list of all customers
@@ -70,10 +51,8 @@ namespace Store.Library
         {
             // set up context
             using var context = new Project0Context(_dbContext);
-
             // get all the customer from db
             var dbCustomers = context.Customers.ToList();
-
             // convert and return to our customer class
             return dbCustomers.Select(c => new Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
@@ -94,7 +73,6 @@ namespace Store.Library
         {
             // set up context
             using var context = new Project0Context(_dbContext);
-
             return context.Customers.ToList().Count();
         }
 
@@ -102,9 +80,7 @@ namespace Store.Library
         {
             // set up context
             using var context = new Project0Context(_dbContext);
-
             var dbCust = context.Customers.FirstOrDefault(c => c.Id == id);
-
             return new Customer(dbCust.FirstName, dbCust.LastName, dbCust.Id) ?? null;
         }
     }

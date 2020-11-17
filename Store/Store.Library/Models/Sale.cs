@@ -10,7 +10,6 @@ namespace Store.Library
         public int ProductId { get; set; }
         public string ProductName { get; }
         public decimal PurchasePrice { get; }
-        public Product ProductObj { get; set; }
         public int SaleQuantity
         {
             get { return _saleQuantity; }
@@ -21,12 +20,6 @@ namespace Store.Library
                 else
                     throw new ArgumentOutOfRangeException("SaleQuantity", "Sale Quantity must be greater than zero");
            }
-        }
-
-        public Sale(Product prod, int quantity)
-        {
-            this.ProductObj = prod;
-            this.SaleQuantity = quantity;
         }
 
         public Sale(int productId, int quantity)

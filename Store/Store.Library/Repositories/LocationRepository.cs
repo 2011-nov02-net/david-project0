@@ -9,29 +9,14 @@ namespace Store.Library
 {
     public class LocationRepository
     {
-        private readonly ICollection<Location> _location;
-        private static int _idCounter;
-
         private readonly DbContextOptions<Project0Context> _dbContext;
 
         /// <summary>
-        /// Constructor that will take a preformed set of location and store it
+        /// Constructor that set up the connection for the db
         /// </summary>
-        /// <param name="location"> the Collection of location</param>
-        public LocationRepository(ICollection<Location> location)
-        {
-            _location = location ?? throw new ArgumentNullException(nameof(location));
-            //set the id counter
-            _idCounter = location.Count + 1;
-        }
-
-        /// <summary>
-        /// Constructor that will make an empty list of location
-        /// </summary>
+        /// <param name="contextOptions">The Database Connection</param>
         public LocationRepository(DbContextOptions<Project0Context> contextOptions)
         {
-            _location = new List<Location>();
-            _idCounter = 1;
             _dbContext = contextOptions;
         }
 

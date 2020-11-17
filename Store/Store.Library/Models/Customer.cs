@@ -64,8 +64,6 @@ namespace Store.Library
             this.Id = id;
         }
 
-        public Customer() { }
-
         /// <summary>
         /// Override of ToString methdo
         /// </summary>

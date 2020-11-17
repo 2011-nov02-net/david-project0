@@ -25,19 +25,6 @@ namespace Store.Library
             }
         }
 
-        public decimal GetTotalOfOrder()
-        {
-            return SalesList.Sum(sale => sale.ProductObj.Price * sale.SaleQuantity);
-        }
-
-        public Order(int custId, int locId, List<Sale> sales, DateTime date, int orderNumber)
-        {
-            this.CustomerId = custId;
-            this.LocationId = locId;
-            this.SalesList = sales;
-            this.Date = date;
-            this.OrderNumber = orderNumber;
-        }
         public Order(int custId, int locId, List<Sale> sales, DateTime date, int orderNumber, decimal orderTotal)
         {
             this.CustomerId = custId;
@@ -55,14 +42,6 @@ namespace Store.Library
             this.Date = date;
             this.OrderNumber = orderNumber;
             this.OrderTotal = orderTotal;
-        }
-
-        public Order(int custId, int locId, DateTime date, int orderNumber)
-        {
-            this.CustomerId = custId;
-            this.LocationId = locId;
-            this.Date = date;
-            this.OrderNumber = orderNumber;
         }
     }
 }

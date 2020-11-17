@@ -101,8 +101,6 @@ namespace Store.Library
 
         public DatabaseModels.Product GetProduct(string name) => Products.GetProduct(name);
 
-        public Product GetProduct(int id) => Products.GetProduct(id);
-
         public void CreateProduct(string name, string description, decimal price, int orderLimit) => Products.AddDbProduct(name, description, price, orderLimit);
 
         public bool IsWithinOrderLimit(int productId, int quantity) => Products.IsWithinOrderLimit(productId, quantity);
@@ -129,16 +127,7 @@ namespace Store.Library
 
         public void AddSaleToOrder(Sale sale) => SalesList.Add(sale);
 
-
         public List<Sale> GetCurrentOrderSales() => new List<Sale>(SalesList);
-
-        // ---------------------------------------------------------------------
-        // All Closing related Session Methods go here
-
-        public void CloseSession()
-        {
-            //does nothing at the moment, but will eventually save the details of the session
-        }
 
         // ----------------------------------------------------------------------
         // All DB connection stuff

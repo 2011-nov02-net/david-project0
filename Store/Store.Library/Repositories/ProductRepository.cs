@@ -30,15 +30,6 @@ namespace Store.Library.Repositories
             return context.Products.FirstOrDefault(p => p.Name == name);
         }
 
-        public Product GetProduct(int id)
-        {
-            // get the context of the db
-            using var context = new Project0Context(_dbContext);
-            var dbProd = context.Products.First(p => p.Id == id);
-
-            return new Product(dbProd.Name, dbProd.Id, dbProd.Price, dbProd.Description, dbProd.OrderLimit);
-        }
-
         public void AddDbProduct(string name, string description, decimal price, int orderLimit)
         {
             // get the context of the db
