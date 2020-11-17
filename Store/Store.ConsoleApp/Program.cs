@@ -4,6 +4,7 @@ using Store.Library;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Store.DatabaseModels;
+using Store.Library.Sorting;
 
 namespace Store.ConsoleApp
 {
@@ -522,21 +523,23 @@ namespace Store.ConsoleApp
 
         public static void ViewAllOrders()
         {
-
             Console.Clear();
             // get all orders from the db
-            var orders = ses.GetAllOrders();
+            var orders = ses.AllOrders;
+
+            //get which sorter to implement
+            ISorter sorter;
+            sorter = GetSorter();
 
             //make sure there are orders
             if(orders.Count > 0)
             {
-                foreach (var item in orders)
+                foreach (var item in sorter.SortOrders(orders))
                 {
                     //print each one
                     Console.WriteLine("Order Number | Date \t\t\t| Customer ID | Customer Last Name | Location ID |      Total");
                     var cust = ses.GetCustomer(item.CustomerId);
-                    var total = ses.GetOrderTotal(item.OrderNumber);
-                    Console.WriteLine($"{item.OrderNumber, 12} |{item.Date, 25 } | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {total.ToString("F"), 10}");
+                    Console.WriteLine($"{item.OrderNumber, 12} |{item.Date, 25 } | {item.CustomerId,11} | {cust?.LastName, 19}| {item.LocationId, 11} | {item.OrderTotal.ToString("F"), 10}");
                     Console.WriteLine("-----------------------------------------------------------------------------------------------------");
                 }
             }
@@ -548,7 +551,7 @@ namespace Store.ConsoleApp
             Console.Clear();
             if (ses.CurrentCustomer != null)
             {
-                var orders = ses.GetAllOrdersByCustomer();
+                var orders = ses.AllOrdersByCustomer;
 
                 //make sure there are orders
                 if (orders.Count > 0)
@@ -575,7 +578,7 @@ namespace Store.ConsoleApp
             Console.Clear();
             if(ses.CurrentLocation != null)
             {
-                var orders = ses.GetAllOrdersByLocation();
+                var orders = ses.AllOrdersByLocation;
 
                 //make sure there are orders
                 if (orders.Count > 0)
@@ -657,16 +660,13 @@ namespace Store.ConsoleApp
             if (ses.CurrentCustomer != null && ses.CurrentLocation != null)
             {
                 string input = "";
-                // make a new list of products that the order will contain
-                var salesList = new List<Library.Sale>();
-
                 while (input != "d")
                 {
                     // Clear the console
                     Console.Clear();
                     // Display products from the store selected
                     PrintLocationInventory();
-                    PrintCurrentOrder(salesList);
+                    PrintCurrentOrder(ses.GetCurrentOrderSales());
                     Console.Write("Type Product Id or (D)one:");
                     input = Console.ReadLine();
                     if (input.ToLower() == "d")
@@ -704,7 +704,7 @@ namespace Store.ConsoleApp
                         {
                             //create new product and add it to the list
                             var sale = new Library.Sale(productId, quantity);
-                            salesList.Add(sale);
+                            ses.AddSaleToOrder(sale);
                         }
                         else
                         {
@@ -722,9 +722,9 @@ namespace Store.ConsoleApp
 
                     }
                 }
-                if(salesList.Count != 0)
+                if(ses.GetCurrentOrderSales().Count != 0)
                 {
-                    ses.AddOrder(salesList);
+                    ses.AddOrder();
                 }
                 else
                 {
@@ -758,6 +758,46 @@ namespace Store.ConsoleApp
             //wait for key press
             Console.WriteLine("Press any key to go back");
             Console.ReadKey();
+        }
+
+        public static ISorter GetSorter()
+        {
+            ISorter sorter = new NonSorter();
+            string input = "";
+            while(input != "dn" && input != "do" && input != "oh" && input != "ol" && input != "ond" && input != "ona" && input != "d")
+            {
+                Console.WriteLine("Please Enter Sort Method");
+                Console.WriteLine("(dn) Date Newest | (do) Date Oldest | (oh) Order Total Highest | (ol) Order Total Lowest");
+                Console.WriteLine("(ond) Order Number Descending | (ona) Order Number Ascending | (d) Default");
+                Console.Write("Selection: ");
+                input = Console.ReadLine().Trim().ToLower();
+            }
+
+            Console.Clear();
+
+            switch (input)
+            {
+                case "dn":
+                    sorter = new NewestOrderSorter();
+                    break;
+                case "do":
+                    sorter = new OldestOrderSorter();
+                    break;
+                case "oh":
+                    sorter = new HighestOrderTotalSorter();
+                    break;
+                case "ol":
+                    sorter = new LowestOrderTotalSorter();
+                    break;
+                case "ond":
+                    sorter = new OrderNumberDescendingSorter();
+                    break;
+                case "ona":
+                    sorter = new OrderNumberAscendingSorter();
+                    break;
+            }
+
+            return sorter;
         }
     }
 }
