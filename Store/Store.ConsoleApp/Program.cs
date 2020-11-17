@@ -42,6 +42,7 @@ namespace Store.ConsoleApp
             Console.WriteLine("(9) View All Orders");
             Console.WriteLine("(10) View All Orders By Customer");
             Console.WriteLine("(11) View All Orders At Location");
+            Console.WriteLine("(12) Make New Order");
             Console.WriteLine("E(x)it");
             Console.Write("Selection: ");
         }
@@ -95,6 +96,10 @@ namespace Store.ConsoleApp
                     break;
                 case "11":
                     ViewAllOrdersByLocation();
+                    WaitOnKeyPress();
+                    break;
+                case "12":
+                    MakeOrder();
                     WaitOnKeyPress();
                     break;
                 case "x":
@@ -584,6 +589,105 @@ namespace Store.ConsoleApp
             else
             {
                 Console.WriteLine("No Orders to show from current Location.");
+            }
+        }
+
+        public static void MakeOrder()
+        {
+            Console.Clear();
+            if (ses.CurrentCustomer != null && ses.CurrentLocation != null)
+            {
+                string input = "";
+                // make a new list of products that the order will contain
+                var salesList = new List<Library.Sale>();
+
+                while (input != "d")
+                {
+                    // Clear the console
+                    Console.Clear();
+                    // Display products from the store selected
+                    PrintLocationInventory();
+                    PrintCurrentOrder(salesList);
+                    Console.Write("Type Product Id or (D)one:");
+                    input = Console.ReadLine();
+                    if (input.ToLower() == "d")
+                        continue;
+
+                    int productId;
+                    try
+                    {
+                        productId = Int32.Parse(input);
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Please enter a number.");
+                        WaitOnKeyPress();
+                        continue;
+                    }
+
+                    // make sure the product id selected is in current list
+                    if (ses.IsInLocationInventory(productId))
+                    {
+                        Console.Write("Please enter quanity: ");
+                        int quantity;
+                        try
+                        {
+                            quantity = Int32.Parse(Console.ReadLine());
+                        }
+                        catch (ArgumentException)
+                        {
+                            Console.WriteLine("Please enter a number");
+                            WaitOnKeyPress();
+                            continue;
+                        }
+                        // ensure quantity typed is above 0 and at or below order limit
+                        if (quantity > 0 && ses.IsWithinOrderLimit(productId, quantity) && ses.IsEnoughInventory(productId, quantity))
+                        {
+                            //create new product and add it to the list
+                            var sale = new Library.Sale(productId, quantity);
+                            salesList.Add(sale);
+                        }
+                        else
+                        {
+                            if(quantity <= 0)
+                            {
+                                Console.WriteLine("Please Enter Value above 0.");
+                            }
+                            else
+                            {
+                                // reach here when the quantity requested is higher than the order limit
+                                Console.WriteLine("Please enter a Value below the order Limit.");
+                            }
+                            WaitOnKeyPress();
+                        }
+
+                    }
+                }
+                if(salesList.Count != 0)
+                {
+                    ses.AddOrder(salesList);
+                }
+                else
+                {
+                    Console.WriteLine("Nothing added to order.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Please select both a Customer and Location.");
+            }
+        }
+
+        public static void PrintCurrentOrder(ICollection<Library.Sale> sales)
+        {
+            // Print the products in the current order
+            Console.WriteLine("\tProduct | Quantity");
+            if(sales.Count != 0)
+            {
+                foreach(var item in sales)
+                {
+                    Console.WriteLine($"{item.ProductId,11} | {item.SaleQuantity}");
+                }
             }
         }
 

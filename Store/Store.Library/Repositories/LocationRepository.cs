@@ -209,5 +209,13 @@ namespace Store.Library
 
             return true;
         }
+
+        public bool IsEnoughInventory(Location location, int productId, int quantity)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+
+            return quantity <= context.Inventories.First(i => i.LocationId == location.Id && i.ProductId == productId).Quantity;
+        }
     }
 }

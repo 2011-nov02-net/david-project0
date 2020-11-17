@@ -27,12 +27,45 @@ namespace Store.Library
             _dbContext = contextOptions;
         }
 
-        public void AddOrder(int custId, int locId, List<Sale> sales, DateTime date)
+        public void AddOrder(Customer customer, Location location, ICollection<Sale> sales)
         {
-            //create the new order
-            Order order = new Order(custId, locId, sales, date, _orderIdCounter);
-            _orderIdCounter++;
-            _orders.Add(order);
+            // get the context of the db
+            using var context = new Project0Context(_dbContext);
+
+            // create list converting from Library.Sale to DatabaseModel.Sale
+
+            var dbSales = new List<DatabaseModels.Sale>();
+
+            foreach(var item in sales)
+            {
+                // need the product details
+                var dbProduct = context.Products.First(p => p.Id == item.ProductId);
+                var dbSale = new DatabaseModels.Sale()
+                {
+                    ProductId = item.ProductId,
+                    ProductName = dbProduct.Name,
+                    PurchasePrice = dbProduct.Price,
+                    Quantity = item.SaleQuantity,
+                };
+                dbSales.Add(dbSale);
+                // remove the amount from the inventory of the store
+                var locationInventory = context.Inventories.First(i => i.LocationId == location.Id && i.ProductId == item.ProductId);
+                locationInventory.Quantity -= item.SaleQuantity;
+                context.Inventories.Update(locationInventory);
+                context.SaveChanges();
+            }
+
+            // create the classes
+            var order = new DatabaseModels.Order()
+            {
+                CustomerId = customer.Id,
+                LocationId = location.Id,
+                Date = DateTime.Now,
+                Sales = dbSales
+            };
+
+            context.Orders.Add(order);
+            context.SaveChanges();
         }
 
         public List<Order> GetAllOrders()

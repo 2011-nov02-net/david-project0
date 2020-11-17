@@ -147,6 +147,11 @@ namespace Store.Library
             return Locations.RemoveLocationInventory(CurrentLocation, productId);
         }
 
+        public bool IsEnoughInventory(int productId, int quantity)
+        {
+            return Locations.IsEnoughInventory(CurrentLocation,productId, quantity);
+        }
+
         // ---------------------------------------------------------------------
         // All Product related Session Methods go here
 
@@ -160,9 +165,19 @@ namespace Store.Library
             return Products.GetProduct(name);
         }
 
+        public Product GetProduct(int id)
+        {
+            return Products.GetProduct(id);
+        }
+
         public void CreateProduct(string name, string description, decimal price, int orderLimit)
         {
             Products.AddDbProduct(name, description, price, orderLimit);
+        }
+
+        public bool IsWithinOrderLimit(int productId, int quantity)
+        {
+            return Products.IsWithinOrderLimit(productId, quantity);
         }
 
         // ---------------------------------------------------------------------
@@ -186,6 +201,11 @@ namespace Store.Library
         public Decimal GetOrderTotal(int orderId)
         {
             return Orders.GetOrderTotal(orderId);
+        }
+
+        public void AddOrder(ICollection<Library.Sale> sales)
+        {
+            Orders.AddOrder(CurrentCustomer, CurrentLocation, sales);
         }
 
 
