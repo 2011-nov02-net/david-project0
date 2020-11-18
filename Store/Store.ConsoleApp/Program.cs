@@ -365,53 +365,61 @@ namespace Store.ConsoleApp
         /// </summary>
         public static void AddExistingInventory()
         {
-            //since we have already displayed all the inventory at the location we can just get the selection here
-            int productInput = -1;
-            while (productInput <= 0)
+            // check to see if there is actually anything in this inventory
+            if (ses.GetLocationInventory().Count != 0)
             {
-                Console.Clear();
-                PrintLocationInventory();
-                Console.Write("Please enter the Product Id to add inventory to: ");
-                try
+                //since we have already displayed all the inventory at the location we can just get the selection here
+                int productInput = -1;
+                while (productInput <= 0)
                 {
-                    productInput = Int32.Parse(Console.ReadLine());
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Please Enter a valid number");
-                    continue;
+                    Console.Clear();
+                    PrintLocationInventory();
+                    Console.Write("Please enter the Product Id to add inventory to: ");
+                    try
+                    {
+                        productInput = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
+
+                    //check to see if the id given is an actual customer
+                    if (!ses.IsInLocationInventory(productInput))
+                    {
+                        Console.WriteLine("Please enter a valid Product ID");
+                        productInput = -1;
+                    }
                 }
 
-                //check to see if the id given is an actual customer
-                if (!ses.IsInLocationInventory(productInput))
+                int quantityToAdd = -1;
+                while (quantityToAdd <= 0)
                 {
-                    Console.WriteLine("Please enter a valid Product ID");
-                    productInput = -1;
+                    Console.Write("Quantity to add: ");
+                    try
+                    {
+                        quantityToAdd = Int32.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please Enter a valid number");
+                        continue;
+                    }
                 }
-            }
 
-            int quantityToAdd = -1;
-            while (quantityToAdd <= 0)
-            {
-                Console.Write("Quantity to add: ");
-                try
+                if (ses.AddLocationInventory(productInput, quantityToAdd))
                 {
-                    quantityToAdd = Int32.Parse(Console.ReadLine());
+                    Console.WriteLine($"{quantityToAdd} added to inventory!");
                 }
-                catch (FormatException)
+                else
                 {
-                    Console.WriteLine("Please Enter a valid number");
-                    continue;
+                    Console.WriteLine("Error adding to inventory");
                 }
-            }
-
-            if (ses.AddLocationInventory(productInput, quantityToAdd))
-            {
-                Console.WriteLine($"{quantityToAdd} added to inventory!");
             }
             else
             {
-                Console.WriteLine("Error adding to inventory");
+                Console.WriteLine("No inventory Found.");
             }
         }
 
