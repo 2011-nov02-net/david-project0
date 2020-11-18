@@ -55,21 +55,6 @@ namespace Store.Library
             this.LocationInventory = new List<Inventory>();
         }
 
-        public Location() 
-        {
-            this.LocationInventory = new List<Inventory>();
-        }
-
-        /// <summary>
-        /// Check to see if the product exists
-        /// </summary>
-        /// <param name="prod">The Product</param>
-        /// <returns>True if exists, False otherwise</returns>
-        public bool CheckInventoryForProduct(Product prod)
-        {
-            return LocationInventory.Any(p => p.ProductObj.Id == prod.Id);
-        }
-
         /// <summary>
         /// Override of ToString method
         /// </summary>

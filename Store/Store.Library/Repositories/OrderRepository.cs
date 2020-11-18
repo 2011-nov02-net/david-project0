@@ -17,6 +17,12 @@ namespace Store.Library
             _dbContext = contextOptions;
         }
 
+        /// <summary>
+        /// Adds an order to the database
+        /// </summary>
+        /// <param name="customer">Customer that placed order</param>
+        /// <param name="location">Location that was ordered from</param>
+        /// <param name="sales">List of sales that the customer placed</param>
         public void AddOrder(Customer customer, Location location, ICollection<Sale> sales)
         {
             // get the context of the db
@@ -65,6 +71,13 @@ namespace Store.Library
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// All the orders from the DB
+        /// </summary>
+        /// <remarks>
+        /// Converts from DatabaseModel.Order to Library.Order
+        /// </remarks>
+        /// <returns>List of all orders</returns>
         public List<Order> GetAllOrders()
         {
             // get the context of the db
@@ -75,6 +88,13 @@ namespace Store.Library
             return dbOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber, o.OrderTotal)).ToList();
         }
 
+        /// <summary>
+        /// All the orders for a given customer from the DB
+        /// </summary>
+        /// <remarks>
+        /// Converts from DatabaseModel.Order to Library.Order
+        /// </remarks>
+        /// <returns>List of all orders for a given customer</returns>
         public List<Order> GetAllOrdersByCustomer(int custId)
         {
             // get the context of the db
@@ -85,6 +105,13 @@ namespace Store.Library
             return dbCustOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber, o.OrderTotal)).ToList();
         }
 
+        /// <summary>
+        /// All the orders from the DB for a given location
+        /// </summary>
+        /// <remarks>
+        /// Converts from DatabaseModel.Order to Library.Order
+        /// </remarks>
+        /// <returns>List of all orders for a location</returns>
         public List<Order> GetAllOrdersByLocation(int locId)
         {
             // get the context of the db
@@ -95,7 +122,11 @@ namespace Store.Library
             return dbLocationOrders.Select(o => new Order(o.CustomerId, o.LocationId, o.Date, o.OrderNumber, o.OrderTotal)).ToList();
         }
 
-
+        /// <summary>
+        /// Gets total order price
+        /// </summary>
+        /// <param name="orderId">The order that we want to total</param>
+        /// <returns>Sum of all sales in order</returns>
         public decimal GetOrderTotal(int orderId)
         {
             // get the context of the db
@@ -113,6 +144,14 @@ namespace Store.Library
             return sum;
         }
 
+        /// <summary>
+        /// Gets one order from the database
+        /// </summary>
+        /// <remarks>
+        /// Converts from DatabaseModel.Order to Library.Order
+        /// </remarks>
+        /// <param name="orderId">Order Number to get</param>
+        /// <returns>The order</returns>
         public Order GetOrder(int orderId)
         {
             // get the context of the db

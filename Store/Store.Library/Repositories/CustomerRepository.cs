@@ -82,6 +82,10 @@ namespace Store.Library
             return context.Customers.Any(c => c.FirstName == firstName && c.LastName == lastName);
         }
 
+        /// <summary>
+        /// Get the list of customers from DB and returns the number
+        /// </summary>
+        /// <returns>The Number of customers currently in the db</returns>
         public int NumberOfCustomers()
         {
             // set up context
@@ -89,6 +93,14 @@ namespace Store.Library
             return context.Customers.ToList().Count();
         }
 
+        /// <summary>
+        /// Get and return the customer from the DB by id
+        /// </summary>
+        /// <remarks>
+        /// Will convert from DatabaseModels.Customer to our Library.Customer
+        /// </remarks>
+        /// <param name="id">the id of the customer</param>
+        /// <returns>the customer</returns>
         public Customer GetCustomer(int id)
         {
             // set up context
@@ -97,6 +109,15 @@ namespace Store.Library
             return new Customer(dbCust.FirstName, dbCust.LastName, dbCust.Id) ?? null;
         }
 
+        /// <summary>
+        /// Get and return the customer from the DB by name
+        /// </summary>
+        /// <remarks>
+        /// Will convert from DatabaseModels.Customer to our Library.Customer
+        /// </remarks>
+        /// <param name="firstName">the first name of the customer</param>
+        /// <param name="lastName">the last name of the customer</param>
+        /// <returns>the customer</returns>
         public Customer GetCustomer(string firstName, string lastName)
         {
             // set up context

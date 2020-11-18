@@ -18,22 +18,6 @@ namespace Store.Library
         // that will have a database to link to.
 
         /// <summary>
-        /// The Product Id
-        /// </summary>
-        public int ProductId
-        {
-            get { return _productId; }
-            private set
-            {
-                //make sure that it is greater than zero
-                if (value > 0)
-                    _productId = value;
-                else
-                    throw new ArgumentOutOfRangeException("ProductId", "The product ID must be a value greater than zero");
-            }
-        }
-
-        /// <summary>
         /// The quantity in stock at a location
         /// </summary>
         public int Quantity 

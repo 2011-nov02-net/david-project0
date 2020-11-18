@@ -99,6 +99,10 @@ namespace Store.Library
             return context.Locations.Any(l => l.Name == name);
         }
 
+        /// <summary>
+        /// Gets the number of locations currently in the db
+        /// </summary>
+        /// <returns>Number of locations</returns>
         public int NumberOfLocations()
         {
             // set up context
@@ -107,6 +111,16 @@ namespace Store.Library
             return context.Locations.ToList().Count;
         }
 
+        /// <summary>
+        /// Gets the inventory at the location given
+        /// </summary>
+        /// <remarks>
+        /// The db will return everything in terms of DatabaseModels.Inventory
+        /// so this will convert it to our Library.Inventory with a Product object
+        /// stored with it
+        /// </remarks>
+        /// <param name="location">The Location to get inventory from</param>
+        /// <returns>The Invetory at location</returns>
         public ICollection<Inventory> GetLocationInventory(Location location)
         {
             // set up context
@@ -130,6 +144,12 @@ namespace Store.Library
             return inventory;
         }
 
+        /// <summary>
+        /// Checks to see if a product is at a particular location
+        /// </summary>
+        /// <param name="location">The location</param>
+        /// <param name="productId">the product id</param>
+        /// <returns>True if product id is at the location, false other wise</returns>
         public bool IsInLocationInventory(Location location, int productId)
         {
             // set up context
@@ -139,6 +159,13 @@ namespace Store.Library
             return context.Inventories.Any(i => i.LocationId == location.Id && i.ProductId == productId);
         }
 
+        /// <summary>
+        /// Adds a given quantity of a product to a locaion
+        /// </summary>
+        /// <param name="location">The location to add to</param>
+        /// <param name="productId">The product to add</param>
+        /// <param name="quantity">The amount to add</param>
+        /// <returns>True if sucessful, false otherwise</returns>
         public bool AddLocationInventory(Location location, int productId, int quantity)
         {
             // set up context
@@ -161,6 +188,13 @@ namespace Store.Library
             return true;
         }
 
+        /// <summary>
+        /// Adds a given quantity of a product to a locaion
+        /// </summary>
+        /// <param name="location">The location to add too</param>
+        /// <param name="product">The product to add</param>
+        /// <param name="quantity">amount to add</param>
+        /// <returns></returns>
         public bool AddLocationInventory(Location location, DatabaseModels.Product product, int quantity)
         {
             // set up context
@@ -188,6 +222,15 @@ namespace Store.Library
             return true;
         }
 
+        /// <summary>
+        /// Removes a whole product from inventory
+        /// </summary>
+        /// <remarks>
+        /// Will remove the entire product, currently there is no way to remove a particular quantity yet
+        /// </remarks>
+        /// <param name="location">The location to remove from</param>
+        /// <param name="productId">The product to remove</param>
+        /// <returns>true is sucessful, false otherwise</returns>
         public bool RemoveLocationInventory(Location location, int productId)
         {
             // set up context
@@ -207,6 +250,13 @@ namespace Store.Library
             return true;
         }
 
+        /// <summary>
+        /// Checks to see if there is enough inventory of a product to complete an order
+        /// </summary>
+        /// <param name="location">Location that the order is being placed at</param>
+        /// <param name="productId">Product that is being ordered</param>
+        /// <param name="quantity">amount of said product</param>
+        /// <returns>true if enough, false otherwise</returns>
         public bool IsEnoughInventory(Location location, int productId, int quantity)
         {
             // set up context
