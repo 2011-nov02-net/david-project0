@@ -170,35 +170,87 @@ namespace Store.ConsoleApp
         {
             if (!(ses.NumOfCurrentCustomers() == 0))
             {
-                //since we have already displayed all customers we can just get the selection here
-                int input = -1;
-                while (input <= 0)
+                string input = "";
+                while(input != "id" && input != "n")
                 {
-                    Console.Write("Please enter your Customer Id: ");
-                    try
-                    {
-                        input = Int32.Parse(Console.ReadLine());
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Please Enter a valid number");
-                        continue;
-                    }
-
-                    //check to see if the id given is an actual customer
-                    if (!ses.IsCustomer(input))
-                    {
-                        Console.WriteLine("Please enter a valid Customer ID");
-                        input = -1;
-                    }
+                    Console.Write("Search by Customer (Id) or (n)ame: ");
+                    input = Console.ReadLine().Trim().ToLower();
                 }
-                // have a customer id, tell the session to remember that
-                ses.SetCurrentCustomer(input);
+
+                if (input == "id")
+                    SetById();
+                else
+                    SetByName();
             }
             else
             {
                 WaitOnKeyPress();
             }
+        }
+
+        /// <summary>
+        /// Asks the user for customer id to set in the session
+        /// </summary>
+        public static void SetById()
+        {
+            //since we have already displayed all customers we can just get the selection here
+            int input = -1;
+            while (input <= 0)
+            {
+                Console.Write("Please enter your Customer Id: ");
+                try
+                {
+                    input = Int32.Parse(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please Enter a valid number");
+                    continue;
+                }
+
+                //check to see if the id given is an actual customer
+                if (!ses.IsCustomer(input))
+                {
+                    Console.WriteLine("Please enter a valid Customer ID");
+                    input = -1;
+                }
+            }
+
+            // set the customer
+            ses.SetCurrentCustomer(input);
+        }
+
+        /// <summary>
+        /// Asks the user for customer name to set in the session
+        /// </summary>
+        public static void SetByName()
+        {
+            bool isCust = false;
+            string firstName = "";
+            string lastName = "";
+
+            while (!isCust)
+            {
+                //get the first name
+                while (firstName.Length == 0)
+                {
+                    Console.Write("Please enter first name: ");
+                    firstName = Console.ReadLine().Trim();
+                }
+                // get the last name  
+                while (lastName.Length == 0)
+                {
+                    Console.Write("Please enter last name: ");
+                    lastName = Console.ReadLine().Trim();
+                }
+
+                if(ses.IsCustomer(firstName, lastName))
+                    isCust = true;
+                else
+                    Console.WriteLine("Please enter a valid customer name.");
+            }
+
+            ses.SetCurrentCustomer(firstName, lastName);
         }
 
         //--------------------------------------------------------------------

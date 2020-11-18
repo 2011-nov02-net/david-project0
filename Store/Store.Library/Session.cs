@@ -52,6 +52,8 @@ namespace Store.Library
 
         public void SetCurrentCustomer(int id) => CurrentCustomer = Customers.GetCustomer(id);
 
+        public void SetCurrentCustomer(string firstName, string lastName) => CurrentCustomer = Customers.GetCustomer(firstName, lastName);
+
         public string ShowCurrentCustomer() => CurrentCustomer?.ToString() ?? "No Customer Currently Selected";
 
         public bool IsCustomer(int id) => Customers.IsCustomer(id);

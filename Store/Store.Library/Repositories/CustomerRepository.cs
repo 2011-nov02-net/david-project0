@@ -96,5 +96,13 @@ namespace Store.Library
             var dbCust = context.Customers.FirstOrDefault(c => c.Id == id);
             return new Customer(dbCust.FirstName, dbCust.LastName, dbCust.Id) ?? null;
         }
+
+        public Customer GetCustomer(string firstName, string lastName)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+            var dbCust = context.Customers.FirstOrDefault(c => c.FirstName == firstName && c.LastName == lastName);
+            return new Customer(dbCust.FirstName, dbCust.LastName, dbCust.Id) ?? null;
+        }
     }
 }
