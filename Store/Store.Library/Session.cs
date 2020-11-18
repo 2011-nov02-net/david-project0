@@ -56,6 +56,8 @@ namespace Store.Library
 
         public bool IsCustomer(int id) => Customers.IsCustomer(id);
 
+        public bool IsCustomer(string firstName, string lastName) => Customers.IsCustomer(firstName, lastName);
+
         public int NumOfCurrentCustomers() => Customers.NumberOfCustomers();
 
         public Customer GetCustomer(int id) => Customers.GetCustomer(id);
@@ -74,6 +76,8 @@ namespace Store.Library
         public int NumOfCurrentLocations() => Locations.NumberOfLocations();
 
         public bool IsLocation(int id) => Locations.IsLocation(id);
+
+        public bool IsLocation(string name) => Locations.IsLocation(name);
 
         public ICollection<Inventory> GetLocationInventory() => Locations.GetLocationInventory(CurrentLocation);
 

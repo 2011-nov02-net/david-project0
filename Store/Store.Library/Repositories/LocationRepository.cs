@@ -87,6 +87,18 @@ namespace Store.Library
             return context.Locations.Any(l => l.Id == id);
         }
 
+        /// <summary>
+        /// check to see if the name given is an actual location
+        /// </summary>
+        /// <param name="id">The name of the location we want to check</param>
+        /// <returns>True if location exists, False otherwise</returns>
+        public bool IsLocation(string name)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+            return context.Locations.Any(l => l.Name == name);
+        }
+
         public int NumberOfLocations()
         {
             // set up context

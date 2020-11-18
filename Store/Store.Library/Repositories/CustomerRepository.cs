@@ -69,6 +69,19 @@ namespace Store.Library
             return context.Customers.Any(c => c.Id == id);
         }
 
+        /// <summary>
+        /// check to see if the first and last name given is an actual customer
+        /// </summary>
+        /// <param name="firstName">Customer First Name to check for</param>
+        /// <param name="lastName">Customer last name to check for</param>
+        /// <returns>True if customer with name exists, False otherwise</returns>
+        public bool IsCustomer(string firstName, string lastName)
+        {
+            // set up context
+            using var context = new Project0Context(_dbContext);
+            return context.Customers.Any(c => c.FirstName == firstName && c.LastName == lastName);
+        }
+
         public int NumberOfCustomers()
         {
             // set up context

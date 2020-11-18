@@ -1,4 +1,4 @@
-INSERT INTO Customer (FirstName, LastName) VALUES ('Esmée','Rose'), ('Rowland','Hale'), ('Eli','Marlow'), ('Roland','Elwin'), ('Morton','Chadwick');
+INSERT INTO Customer (FirstName, LastName) VALUES ('Sherlock','Holmes'), ('Rowland','Hale'), ('Eli','Marlow'), ('Roland','Elwin'), ('Morton','Chadwick');
 
 SELECT * FROM Customer;
 
