@@ -151,7 +151,7 @@ namespace Store.Library
         /// </summary>
         /// <param name="id">Location Name to search</param>
         /// <returns>True if location, false otherwise</returns>
-        public bool IsLocation(string name) => Locations.IsLocation(name);
+        
 
         /// <summary>
         /// Inventory at current session Location

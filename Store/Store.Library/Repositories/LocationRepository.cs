@@ -92,12 +92,12 @@ namespace Store.Library
         /// </summary>
         /// <param name="id">The name of the location we want to check</param>
         /// <returns>True if location exists, False otherwise</returns>
-        public bool IsLocation(string name)
-        {
-            // set up context
-            using var context = new Project0Context(_dbContext);
-            return context.Locations.Any(l => l.Name == name);
-        }
+        // public bool IsLocation(string name)
+        // {
+        //     // set up context
+        //     using var context = new Project0Context(_dbContext);
+        //     return context.Locations.Any(l => l.Name == name);
+        // }
 
         /// <summary>
         /// Gets the number of locations currently in the db
