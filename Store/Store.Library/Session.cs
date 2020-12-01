@@ -147,13 +147,6 @@ namespace Store.Library
         public bool IsLocation(int id) => Locations.IsLocation(id);
 
         /// <summary>
-        /// Checks the Location Repository to see if given name is a location
-        /// </summary>
-        /// <param name="id">Location Name to search</param>
-        /// <returns>True if location, false otherwise</returns>
-        public bool IsLocation(string name) => Locations.IsLocation(name);
-
-        /// <summary>
         /// Inventory at current session Location
         /// </summary>
         /// <returns>List of Inventory at Location</returns>
